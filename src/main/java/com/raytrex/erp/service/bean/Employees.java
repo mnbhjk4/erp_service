@@ -3,6 +3,7 @@ package com.raytrex.erp.service.bean;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -24,7 +25,8 @@ public class Employees implements Serializable{
 	private String uid;
 	private String emp_no;
 	private String mail;
-	@OneToOne
+	
+	@OneToOne(cascade=CascadeType.PERSIST)
 	@JoinColumn(name="uid")
 	private Employees_Info employees_Info;
 	
