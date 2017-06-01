@@ -1,15 +1,20 @@
 package com.raytrex.erp.service.bean;
 
+import java.io.Serializable;
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-public class Employees {
+public class Employees implements Serializable{
 	@Id
 	@GeneratedValue(generator = "UUID")
 	@GenericGenerator(
@@ -23,6 +28,13 @@ public class Employees {
 	@JoinColumn(name="uid")
 	private Employees_Info employees_Info;
 	
+	@OneToMany
+	@JoinTable(
+			name="Employee_Role",
+			joinColumns=@JoinColumn(name="uid"),
+			inverseJoinColumns=@JoinColumn(name="role_id")
+	)
+	private List<Role> roles;
 	public String getUid() {
 		return uid;
 	}
