@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-public class RoleBean {
+public class Role {
 	@Id
 	@GeneratedValue(generator = "UUID")
 	@GenericGenerator(
