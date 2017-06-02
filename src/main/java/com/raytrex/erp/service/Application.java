@@ -18,20 +18,6 @@ public class Application {
         SpringApplication.run(Application.class, args);
     }
     
-    @Bean
-    public Employees getEmployeesJDBC(EmployeesRepository r){
-    	Employees e = new Employees();
-    	Employees_Info info = new Employees_Info();
-    	info.setBirth_date(new Date());
-    	info.setFirst_name("TEST");
-    	e.setEmp_no("Test");
-    	e.setMail("test@raytrex.com");
-    	e.setEmployees_Info(info);
-    	
-    	r.save(e); 
-    	
-    	return e;
-    }
     
   
 }

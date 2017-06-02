@@ -31,12 +31,8 @@ public class Employees implements Serializable{
 	private Employees_Info employees_Info;
 	
 	@OneToMany
-	@JoinTable(
-			name="Employee_Role",
-			joinColumns=@JoinColumn(name="uid"),
-			inverseJoinColumns=@JoinColumn(name="role_id")
-	)
-	private List<Role> roles;
+	@JoinColumn(name="uid")
+	private List<Employees_Roles> roles;
 	public String getUid() {
 		return uid;
 	}
@@ -61,4 +57,11 @@ public class Employees implements Serializable{
 	public void setEmployees_Info(Employees_Info employees_Info) {
 		this.employees_Info = employees_Info;
 	}
+	public List<Employees_Roles> getRoles() {
+		return roles;
+	}
+	public void setRoles(List<Employees_Roles> roles) {
+		this.roles = roles;
+	}
+	
 }

@@ -1,14 +1,12 @@
 package com.raytrex.erp.service.bean;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
-
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
@@ -23,8 +21,7 @@ public class Role implements Serializable{
 	private String role_id;
 	private String role_name;
 	private String role_level;
-	private Date fromDate;
-	private Date toDate;
+	
 	@OneToOne
 	@JoinColumn(name="dep_id")
 	private Department department;
@@ -51,18 +48,6 @@ public class Role implements Serializable{
 	}
 	public void setRole_level(String role_level) {
 		this.role_level = role_level;
-	}
-	public Date getFromDate() {
-		return fromDate;
-	}
-	public void setFromDate(Date fromDate) {
-		this.fromDate = fromDate;
-	}
-	public Date getToDate() {
-		return toDate;
-	}
-	public void setToDate(Date toDate) {
-		this.toDate = toDate;
 	}
 	public Department getDepartment() {
 		return department;

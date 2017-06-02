@@ -1,4 +1,3 @@
-
 DROP TABLE IF EXISTS employees, employees_info,department,role,employees_roles;
 CREATE TABLE employees(
 	`UID` VARCHAR(36) NOT NULL,
@@ -35,7 +34,7 @@ CREATE TABLE department (
 	`DEP_NO` VARCHAR(64) NOT NULL,
 	`NAME` VARCHAR(64) NOT NULL,
 	`REGION` VARCHAR(64) NOT NULL,
-	`PARENT_DID` VARCHAR(36),
+	`PARENT_DEP_ID` VARCHAR(36),
 	PRIMARY KEY(`DEP_ID`,`DEP_NO`)
 )ENGINE=Aria
 CHARACTER SET 'utf8' 
