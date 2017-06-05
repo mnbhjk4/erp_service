@@ -3,17 +3,11 @@ package com.raytrex.erp.service.login.microsoft;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
-import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -23,11 +17,9 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
-import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 
 @Service
@@ -77,7 +69,7 @@ public class ADALService {
 		return "[]";
 	}
 	
-	public String getTokenByRefreshToken(String refresh_token,String redirectUri,String scope){
+	public String getTokenByRefreshToken(String refresh_token,String scope,String redirectUri){
 	try{
 		URI uri = new URI("https://login.microsoftonline.com/raytrex.onmicrosoft.com/oauth2/v2.0/token");
 		HttpClient client = HttpClientBuilder.create().build();
