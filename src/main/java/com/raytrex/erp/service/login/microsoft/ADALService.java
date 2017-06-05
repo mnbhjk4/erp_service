@@ -32,9 +32,9 @@ import com.google.gson.GsonBuilder;
 
 @Service
 public class ADALService {
-	public static final String client_id = "77544d4f-2184-4b4c-8760-f3a4474897f9";
+	public static final String client_id = "7c3abeb3-bb33-435a-9ad6-d63ff39e8179";
 	public static final String tenantid = "raytrex.onmicrosoft.com";
-	public static final String client_secert = "gDgF9FdPKLk2uf9A2mOMh1V";
+	public static final String client_secert = "dEczFYJg7E71q6Y2OrZRssu";
 	public String getToken(String authCode,String scope,String redirectUri){
 		try{
 			URI uri = new URI("https://login.microsoftonline.com/raytrex.onmicrosoft.com/oauth2/v2.0/token");
@@ -69,17 +69,54 @@ public class ADALService {
 			while ((line = rd.readLine()) != null) {
 				result.append(line);
 			}
-			Gson gson = new Gson();
-			Map json = gson.fromJson(result.toString(), Map.class);
-			if(json.containsKey("access_token")){
-				return getUserMailList(json.get("access_token").toString());
-			}
-			return json.toString();
+			return result.toString();
 		}catch(Exception e){
 			e.printStackTrace();
 		}
 		
-		return "";
+		return "[]";
+	}
+	
+	public String getTokenByRefreshToken(String refresh_token,String redirectUri,String scope){
+	try{
+		URI uri = new URI("https://login.microsoftonline.com/raytrex.onmicrosoft.com/oauth2/v2.0/token");
+		HttpClient client = HttpClientBuilder.create().build();
+		HttpPost post = new  HttpPost();
+		post.addHeader("Content-Type", "application/x-www-form-urlencoded");
+		post.setURI(uri);
+		
+		ArrayList<NameValuePair> formNameValuePairList = new ArrayList<NameValuePair>();
+		formNameValuePairList.add(new BasicNameValuePair("grant_type","refresh_token"));
+		formNameValuePairList.add(new BasicNameValuePair("client_id", client_id));
+		if(redirectUri.indexOf("localhost") != -1){
+			formNameValuePairList.add(new BasicNameValuePair("client_secret",client_secert));
+		}
+		formNameValuePairList.add(new BasicNameValuePair("refresh_token",refresh_token));
+		formNameValuePairList.add(new BasicNameValuePair("scope",scope));
+		formNameValuePairList.add(new BasicNameValuePair("redirect_uri",redirectUri));
+		post.setEntity(new UrlEncodedFormEntity(formNameValuePairList));
+		
+		HttpResponse response = client.execute(post);
+		int responseCode = response.getStatusLine().getStatusCode();
+
+		System.out.println("Sending 'POST' request to URL : " + uri.toString());
+		System.out.println("Post parameters : " + formNameValuePairList);
+		System.out.println("Response Code : " + responseCode);
+
+		BufferedReader rd = new BufferedReader(
+	                new InputStreamReader(response.getEntity().getContent()));
+
+		StringBuffer result = new StringBuffer();
+		String line = "";
+		while ((line = rd.readLine()) != null) {
+			result.append(line);
+		}
+		return result.toString();
+	}catch(Exception e){
+		e.printStackTrace();
+	}
+	
+	return "[]";
 	}
 	
 	public String getUserMailList(String access_token){
