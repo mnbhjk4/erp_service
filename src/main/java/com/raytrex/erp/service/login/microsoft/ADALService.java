@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.http.HttpResponse;
@@ -152,4 +153,45 @@ public class ADALService {
 		return "";
 	}
 	
+	public String getUserProfilePhoto(String access_token){
+		URI uri;
+		try {
+			uri = new URI("https://graph.microsoft.com/v1.0/me/photo");
+			HttpClient client = HttpClientBuilder.create().build();
+			HttpGet get = new  HttpGet();
+			get.addHeader("Authorization", "Bearer "+access_token);
+			get.setURI(uri);
+			
+			HttpResponse response = client.execute(get);
+			int responseCode = response.getStatusLine().getStatusCode();
+
+			System.out.println("Sending 'GET' request to URL : " + uri.toString());
+			System.out.println("Response Code : " + responseCode);
+
+			BufferedReader rd = new BufferedReader(
+		                new InputStreamReader(response.getEntity().getContent()));
+
+			StringBuffer result = new StringBuffer();
+			String line = "";
+			while ((line = rd.readLine()) != null) {
+				result.append(line);
+			}
+			Gson gson = new Gson();
+			Map json = gson.fromJson(result.toString(), Map.class);
+			if(!json.containsKey("@odata.id")){
+				return "[]";
+			}
+			return json.toString();
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "";
+	}
 }

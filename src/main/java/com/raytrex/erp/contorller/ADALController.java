@@ -23,4 +23,10 @@ public class ADALController {
 	public String getTokenByRefreshToken( String refresh_token,String scope,String redirectUri){
 		return adalService.getTokenByRefreshToken(refresh_token, scope, redirectUri);
 	}
+	
+	@CrossOrigin(origins = {"*","http://localhost:8100"})
+	@RequestMapping("/adal/getUserProfilePhoto")
+	public String getUserProfilePhoto(String access_token){
+		return adalService.getUserProfilePhoto(access_token);
+	}
 }
