@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.http.HttpResponse;
@@ -27,7 +26,7 @@ import com.google.gson.Gson;
 public class ADALService {
 	public static final String client_id = "7c3abeb3-bb33-435a-9ad6-d63ff39e8179";
 	public static final String tenantid = "raytrex.onmicrosoft.com";
-	public static final String client_secert = "dEczFYJg7E71q6Y2OrZRssu";
+	public static final String client_secert = "JmAXcEV54v1kbG2jTuA4JwW";
 	public String getToken(String authCode,String scope,String redirectUri){
 		try{
 			URI uri = new URI("https://login.microsoftonline.com/raytrex.onmicrosoft.com/oauth2/v2.0/token");
