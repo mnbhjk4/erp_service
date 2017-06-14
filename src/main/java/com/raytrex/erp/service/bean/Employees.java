@@ -4,11 +4,11 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
@@ -23,7 +23,9 @@ public class Employees implements Serializable{
 		strategy = "org.hibernate.id.UUIDGenerator"
 	)
 	private String uid;
-	private String emp_no;
+	
+	@Column(name="emp_no")
+	private String empNo;
 	private String mail;
 	
 	@OneToOne(cascade=CascadeType.PERSIST)
@@ -33,35 +35,44 @@ public class Employees implements Serializable{
 	@OneToMany
 	@JoinColumn(name="uid")
 	private List<Employees_Roles> roles;
+
 	public String getUid() {
 		return uid;
 	}
+
 	public void setUid(String uid) {
 		this.uid = uid;
 	}
-	public String getEmp_no() {
-		return emp_no;
+
+	public String getEmpNo() {
+		return empNo;
 	}
-	public void setEmp_no(String emp_no) {
-		this.emp_no = emp_no;
+
+	public void setEmpNo(String empNo) {
+		this.empNo = empNo;
 	}
+
 	public String getMail() {
 		return mail;
 	}
+
 	public void setMail(String mail) {
 		this.mail = mail;
 	}
+
 	public Employees_Info getEmployees_Info() {
 		return employees_Info;
 	}
+
 	public void setEmployees_Info(Employees_Info employees_Info) {
 		this.employees_Info = employees_Info;
 	}
+
 	public List<Employees_Roles> getRoles() {
 		return roles;
 	}
+
 	public void setRoles(List<Employees_Roles> roles) {
 		this.roles = roles;
 	}
-	
 }

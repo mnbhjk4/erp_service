@@ -2,6 +2,7 @@ package com.raytrex.erp.service.bean;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -17,43 +18,59 @@ public class Role implements Serializable{
 		name = "UUID",
 		strategy = "org.hibernate.id.UUIDGenerator"
 	)
-	private String dep_id;
-	private String role_id;
+	@Column(name="dep_id")
+	private String depId;
+	
+	@Column(name="role_id")
+	private String roleId;
+
+	@Column(name="role_name")
 	private String role_name;
-	private String role_level;
+	
+	@Column(name="role_level")
+	private String roleLevel;
 	
 	@OneToOne
-	@JoinColumn(name="dep_id")
+	@JoinColumn(name="depId")
 	private Department department;
-	public String getDep_id() {
-		return dep_id;
+
+	public String getDepId() {
+		return depId;
 	}
-	public void setDep_id(String dep_id) {
-		this.dep_id = dep_id;
+
+	public void setDepId(String depId) {
+		this.depId = depId;
 	}
-	public String getRole_id() {
-		return role_id;
+
+	public String getRoleId() {
+		return roleId;
 	}
-	public void setRole_id(String role_id) {
-		this.role_id = role_id;
+
+	public void setRoleId(String roleId) {
+		this.roleId = roleId;
 	}
+
 	public String getRole_name() {
 		return role_name;
 	}
+
 	public void setRole_name(String role_name) {
 		this.role_name = role_name;
 	}
-	public String getRole_level() {
-		return role_level;
+
+	public String getRoleLevel() {
+		return roleLevel;
 	}
-	public void setRole_level(String role_level) {
-		this.role_level = role_level;
+
+	public void setRoleLevel(String roleLevel) {
+		this.roleLevel = roleLevel;
 	}
+
 	public Department getDepartment() {
 		return department;
 	}
+
 	public void setDepartment(Department department) {
 		this.department = department;
 	}
-	
 }

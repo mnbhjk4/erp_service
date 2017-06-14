@@ -3,6 +3,7 @@ package com.raytrex.erp.service.bean;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -11,89 +12,131 @@ import javax.persistence.Id;
 public class Employees_Info implements Serializable{
 	@Id
 	private String uid;
-	private String first_name;
-	private String mid_name;
-	private String last_name;
-	private Date birth_date;
+	@Column(name="first_name")
+	private String firstName;
+	
+	@Column(name="mid_name")
+	private String midName;
+	
+	@Column(name="last_name")
+	private String lastName;
+	
+	@Column(name="birth_date")
+	private Date birthDate;
+	
 	private String gender;
-	private String contact_addr_1;
-	private String contact_addr_2;
-	private String contact_phone_1;
-	private String contact_phone_2;
-	private Date hire_date;
-	private Date leave_date;
+	
+	@Column(name="contact_addr_1")
+	private String contactAddr1;
+	
+	@Column(name="contact_addr_2")
+	private String contactAddr2;
+	
+	@Column(name="contact_phone_1")
+	private String contactPhone1;
+	
+	@Column(name="contact_phone_2")
+	private String contactPhone2;
+	
+	@Column(name="hire_date")
+	private Date hireDate;
+	
+	@Column(name="leave_date")
+	private Date leaveDate;
+
 	public String getUid() {
 		return uid;
 	}
+
 	public void setUid(String uid) {
 		this.uid = uid;
 	}
-	public String getFirst_name() {
-		return first_name;
+
+	public String getFirstName() {
+		return firstName;
 	}
-	public void setFirst_name(String first_name) {
-		this.first_name = first_name;
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
 	}
-	public String getMid_name() {
-		return mid_name;
+
+	public String getMidName() {
+		return midName;
 	}
-	public void setMid_name(String mid_name) {
-		this.mid_name = mid_name;
+
+	public void setMidName(String midName) {
+		this.midName = midName;
 	}
-	public String getLast_name() {
-		return last_name;
+
+	public String getLastName() {
+		return lastName;
 	}
-	public void setLast_name(String last_name) {
-		this.last_name = last_name;
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
-	public Date getBirth_date() {
-		return birth_date;
+
+	public Date getBirthDate() {
+		return birthDate;
 	}
-	public void setBirth_date(Date birth_date) {
-		this.birth_date = birth_date;
+
+	public void setBirthDate(Date birthDate) {
+		this.birthDate = birthDate;
 	}
+
 	public String getGender() {
 		return gender;
 	}
+
 	public void setGender(String gender) {
 		this.gender = gender;
 	}
-	public String getContact_addr_1() {
-		return contact_addr_1;
+
+	public String getContactAddr1() {
+		return contactAddr1;
 	}
-	public void setContact_addr_1(String contact_addr_1) {
-		this.contact_addr_1 = contact_addr_1;
+
+	public void setContactAddr1(String contactAddr1) {
+		this.contactAddr1 = contactAddr1;
 	}
-	public String getContact_addr_2() {
-		return contact_addr_2;
+
+	public String getContactAddr2() {
+		return contactAddr2;
 	}
-	public void setContact_addr_2(String contact_addr_2) {
-		this.contact_addr_2 = contact_addr_2;
+
+	public void setContactAddr2(String contactAddr2) {
+		this.contactAddr2 = contactAddr2;
 	}
-	public String getContact_phone_1() {
-		return contact_phone_1;
+
+	public String getContactPhone1() {
+		return contactPhone1;
 	}
-	public void setContact_phone_1(String contact_phone_1) {
-		this.contact_phone_1 = contact_phone_1;
+
+	public void setContactPhone1(String contactPhone1) {
+		this.contactPhone1 = contactPhone1;
 	}
-	public String getContact_phone_2() {
-		return contact_phone_2;
+
+	public String getContactPhone2() {
+		return contactPhone2;
 	}
-	public void setContact_phone_2(String contact_phone_2) {
-		this.contact_phone_2 = contact_phone_2;
+
+	public void setContactPhone2(String contactPhone2) {
+		this.contactPhone2 = contactPhone2;
 	}
-	public Date getHire_date() {
-		return hire_date;
+
+	public Date getHireDate() {
+		return hireDate;
 	}
-	public void setHire_date(Date hire_date) {
-		this.hire_date = hire_date;
+
+	public void setHireDate(Date hireDate) {
+		this.hireDate = hireDate;
 	}
-	public Date getLeave_date() {
-		return leave_date;
+
+	public Date getLeaveDate() {
+		return leaveDate;
 	}
-	public void setLeave_date(Date leave_date) {
-		this.leave_date = leave_date;
+
+	public void setLeaveDate(Date leaveDate) {
+		this.leaveDate = leaveDate;
 	}
-	
-	
 }

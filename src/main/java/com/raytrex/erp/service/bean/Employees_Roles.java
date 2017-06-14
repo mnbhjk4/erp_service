@@ -3,6 +3,7 @@ package com.raytrex.erp.service.bean;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -12,45 +13,58 @@ import javax.persistence.OneToOne;
 public class Employees_Roles implements Serializable{
 	@Id
 	private String uid;
+	
 	@Id
-	private String role_id;
-	private Date from_date;
-	private Date to_date;
+	@Column(name="role_id")
+	private String roleId;
+	
+	@Column(name="from_date")
+	private Date fromDate;
+	
+	@Column(name="to_date")
+	private Date toDate;
 	
 	@OneToOne
 	@JoinColumn(name="role_id")
 	private Role role;
+
 	public String getUid() {
 		return uid;
 	}
+
 	public void setUid(String uid) {
 		this.uid = uid;
 	}
-	public String getRole_id() {
-		return role_id;
+
+	public String getRoleId() {
+		return roleId;
 	}
-	public void setRole_id(String role_id) {
-		this.role_id = role_id;
+
+	public void setRoleId(String roleId) {
+		this.roleId = roleId;
 	}
-	public Date getFrom_date() {
-		return from_date;
+
+	public Date getFromDate() {
+		return fromDate;
 	}
-	public void setFrom_date(Date from_date) {
-		this.from_date = from_date;
+
+	public void setFromDate(Date fromDate) {
+		this.fromDate = fromDate;
 	}
-	public Date getTo_date() {
-		return to_date;
+
+	public Date getToDate() {
+		return toDate;
 	}
-	public void setTo_date(Date to_date) {
-		this.to_date = to_date;
+
+	public void setToDate(Date toDate) {
+		this.toDate = toDate;
 	}
+
 	public Role getRole() {
 		return role;
 	}
+
 	public void setRole(Role role) {
 		this.role = role;
-	}
-	public Department getDepartmentInfo(){
-		return this.role.getDepartment();
 	}
 }
