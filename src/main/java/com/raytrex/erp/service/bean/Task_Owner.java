@@ -1,6 +1,7 @@
 package com.raytrex.erp.service.bean;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -64,4 +65,31 @@ public class Task_Owner implements Serializable {
 	public void setLeaveDate(Date leaveDate) {
 		this.leaveDate = leaveDate;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof Task_Owner){
+			Field[] fields = this.getClass().getDeclaredFields();
+			boolean isSameValue = true;
+			for(Field field : fields){
+				try {
+					String targetValue = field.get(this) == null?"":field.get(this).toString();
+					String compareValue = field.get(obj) == null?"":field.get(obj).toString();
+					if(!targetValue.equals(compareValue)){
+						isSameValue = false;
+					}
+				} catch (IllegalArgumentException e) {
+					isSameValue = false;
+				} catch (IllegalAccessException e) {
+					isSameValue = false;
+				}
+			}
+			return isSameValue;
+		}else{
+			return super.equals(obj);
+		}
+		
+	}
+	
+	
 }

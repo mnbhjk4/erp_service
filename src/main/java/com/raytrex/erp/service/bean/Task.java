@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 
 @Entity
 public class Task implements Serializable{
@@ -38,12 +39,15 @@ public class Task implements Serializable{
 	
 	@OneToMany(cascade={CascadeType.ALL})
 	@JoinColumn(name="task_no")
+	@OrderBy("join_date")
 	private List<Task_Owner> taskOwnerList = new ArrayList<Task_Owner>();
 	@OneToMany(cascade={CascadeType.ALL})
 	@JoinColumn(name="task_no")
+	@OrderBy("comment_date DESC")
 	private List<Task_Comment> taskCommentList = new ArrayList<Task_Comment>();
 	@OneToMany(cascade={CascadeType.ALL})
 	@JoinColumn(name="task_no")
+	@OrderBy("update_time DESC")
 	private List<Task_Status> taskStatusList = new ArrayList<Task_Status>();
 	
 	public String getProjectNumber() {
