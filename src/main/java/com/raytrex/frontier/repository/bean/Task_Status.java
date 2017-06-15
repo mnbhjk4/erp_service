@@ -1,4 +1,4 @@
-package com.raytrex.erp.service.bean;
+package com.raytrex.frontier.repository.bean;
 
 import java.io.Serializable;
 import java.util.Date;

@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
-import com.raytrex.erp.repository.EmployeesRepository;
-import com.raytrex.erp.service.bean.Employees;
 import com.raytrex.erp.service.login.microsoft.ADALService;
+import com.raytrex.frontier.repository.EmployeesRepository;
+import com.raytrex.frontier.repository.bean.Employees;
 
 @RestController
 public class UserController {
