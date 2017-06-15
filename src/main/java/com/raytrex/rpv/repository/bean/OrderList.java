@@ -5,11 +5,13 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
 @Table(name="order_list")
 public class OrderList implements Serializable {
+	@Id
 	@Column(name="order_list_number")
 	private Integer orderListNumber;
 	
@@ -47,7 +49,7 @@ public class OrderList implements Serializable {
 	@Column(name="install_measure")
 	private Date installMeasure;
 	
-	private Date uta;
+	private Date uat;
 	
 	private Date fat;
 	
@@ -162,11 +164,12 @@ public class OrderList implements Serializable {
 	public void setInstallMeasure(Date installMeasure) {
 		this.installMeasure = installMeasure;
 	}
-	public Date getUta() {
-		return uta;
+	
+	public Date getUat() {
+		return uat;
 	}
-	public void setUta(Date uta) {
-		this.uta = uta;
+	public void setUat(Date uat) {
+		this.uat = uat;
 	}
 	public Date getFat() {
 		return fat;

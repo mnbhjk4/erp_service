@@ -130,9 +130,9 @@ public class TaskService {
 			task.setName(name);
 			task.setProjectNumber(project_number);
 			task.setTaskNo("DP"+sdf.format(new Date())+(serialNo.getCount()+1));
-			task.setParentTaskNo(parent_task_no);
-			task.setCustomerId(parent_task.getCustomerId());
-			task.setPermissionId(parent_task.getPermissionId());
+//			task.setParentTaskNo(parent_task_no);
+//			task.setCustomerId(parent_task.getCustomerId());
+//			task.setPermissionId(parent_task.getPermissionId());
 			return taskRepository.save(task);
 		}else{
 			return null;

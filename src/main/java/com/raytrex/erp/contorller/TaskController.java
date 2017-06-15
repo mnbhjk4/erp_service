@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.gson.Gson;
 import com.raytrex.erp.service.TaskService;
 import com.raytrex.frontier.repository.bean.Task;
+import com.raytrex.rpv.repository.bean.OrderList;
+import com.raytrex.rpv.repository.bean.OrderListRepository;
 
 @RestController
 @RequestMapping("/task")
@@ -25,13 +27,14 @@ public class TaskController {
 	static Logger log = Logger.getLogger(TaskController.class);
 	@Autowired
 	private TaskService taskService;
+	@Autowired
+	private OrderListRepository order;
 
 	@CrossOrigin(origins = { "*", "http://localhost:8100" })
 	@RequestMapping(value="/test",method=RequestMethod.GET)
 	public String test() {
-	
 		Gson gson = new Gson();
-		Task task = taskService.test();
-		return gson.toJson(task);
+		List<OrderList> result = order.findAll();
+		return gson.toJson(result).toString();
 	}
 }

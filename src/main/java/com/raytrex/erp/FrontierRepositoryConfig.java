@@ -5,7 +5,10 @@ import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -20,36 +23,44 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @EnableAutoConfiguration
 @EnableJpaRepositories(
-		entityManagerFactoryRef = "entityManagerFactory", 
-		transactionManagerRef = "transactionManager", 
-		basePackages = {
+		entityManagerFactoryRef = "frontierEntityManagerFactory", 
+		transactionManagerRef = "frontierTransactionManager", 
+		basePackages = {"com.raytrex.frontier.repository",
 		"com.raytrex.frontier.repository.bean"
 				})
 public class FrontierRepositoryConfig {
 	@Autowired
-	JpaVendorAdapter jpaVendorAdapter;
+    private JpaVendorAdapter jpaVendorAdapter;
 
 	@Autowired
-	DataSource dataSource;
+	@Qualifier("frontierDatasource")
+	private DataSource dataSource;
 
-	@Bean(name = "entityManager")
+	@Bean(name="frontierDatasource")
+	@Primary
+	@ConfigurationProperties(prefix="frontier.datasource")
+	public DataSource getDatasource(){
+		return DataSourceBuilder.create().build();
+	}
+
+	@Bean(name = "frontierEntityManager")
 	public EntityManager entityManager() {
 		return entityManagerFactory().createEntityManager();
 	}
 
 	@Primary
-	@Bean(name = "entityManagerFactory")
+	@Bean(name = "frontierEntityManagerFactory")
 	public EntityManagerFactory entityManagerFactory() {
 		LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
 		emf.setDataSource(dataSource);
 		emf.setJpaVendorAdapter(jpaVendorAdapter);
-		emf.setPackagesToScan("com.mysource.model");
+		emf.setPackagesToScan("com.raytrex.frontier.repository","com.raytrex.frontier.repository.bean");
 		emf.setPersistenceUnitName("default"); // <- giving 'default' as name
 		emf.afterPropertiesSet();
 		return emf.getObject();
 	}
 
-	@Bean(name = "transactionManager")
+	@Bean(name = "forntierTransactionManager")
 	public PlatformTransactionManager transactionManager() {
 		JpaTransactionManager tm = new JpaTransactionManager();
 		tm.setEntityManagerFactory(entityManagerFactory());
