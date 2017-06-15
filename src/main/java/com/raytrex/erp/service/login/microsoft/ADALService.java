@@ -17,6 +17,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
@@ -24,6 +25,7 @@ import com.google.gson.Gson;
 
 @Service
 public class ADALService {
+	static Logger log = Logger.getLogger(ADALService.class);
 	public static final String client_id = "7c3abeb3-bb33-435a-9ad6-d63ff39e8179";
 	public static final String tenantid = "raytrex.onmicrosoft.com";
 	public static final String client_secert = "JmAXcEV54v1kbG2jTuA4JwW";
@@ -49,9 +51,9 @@ public class ADALService {
 			HttpResponse response = client.execute(post);
 			int responseCode = response.getStatusLine().getStatusCode();
 
-			System.out.println("Sending 'POST' request to URL : " + uri.toString());
-			System.out.println("Post parameters : " + formNameValuePairList);
-			System.out.println("Response Code : " + responseCode);
+			log.info("Sending 'POST' request to URL : " + uri.toString());
+			log.info("Post parameters : " + formNameValuePairList);
+			log.info("Response Code : " + responseCode);
 
 			BufferedReader rd = new BufferedReader(
 		                new InputStreamReader(response.getEntity().getContent()));

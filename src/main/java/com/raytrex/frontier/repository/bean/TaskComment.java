@@ -7,11 +7,13 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-public class Task_Comment implements Serializable{
+@Table(name="task_comment")
+public class TaskComment implements Serializable{
 	@Id
 	@GeneratedValue(generator = "UUID")
 	@GenericGenerator(

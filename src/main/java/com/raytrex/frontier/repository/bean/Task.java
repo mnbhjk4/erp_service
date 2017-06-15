@@ -40,15 +40,15 @@ public class Task implements Serializable{
 	@OneToMany(cascade={CascadeType.ALL})
 	@JoinColumn(name="task_no")
 	@OrderBy("join_date")
-	private List<Task_Owner> taskOwnerList = new ArrayList<Task_Owner>();
+	private List<TaskOwner> taskOwnerList = new ArrayList<TaskOwner>();
 	@OneToMany(cascade={CascadeType.ALL})
 	@JoinColumn(name="task_no")
 	@OrderBy("comment_date DESC")
-	private List<Task_Comment> taskCommentList = new ArrayList<Task_Comment>();
+	private List<TaskComment> taskCommentList = new ArrayList<TaskComment>();
 	@OneToMany(cascade={CascadeType.ALL})
 	@JoinColumn(name="task_no")
 	@OrderBy("update_time DESC")
-	private List<Task_Status> taskStatusList = new ArrayList<Task_Status>();
+	private List<TaskStatus> taskStatusList = new ArrayList<TaskStatus>();
 	
 	public String getProjectNumber() {
 		return projectNumber;
@@ -98,22 +98,23 @@ public class Task implements Serializable{
 	public void setParentTaskNo(String parentTaskNo) {
 		this.parentTaskNo = parentTaskNo;
 	}
-	public List<Task_Owner> getTaskOwnerList() {
+	public List<TaskOwner> getTaskOwnerList() {
 		return taskOwnerList;
 	}
-	public void setTaskOwnerList(List<Task_Owner> taskOwnerList) {
+	public void setTaskOwnerList(List<TaskOwner> taskOwnerList) {
 		this.taskOwnerList = taskOwnerList;
 	}
-	public List<Task_Comment> getTaskCommentList() {
+	
+	public List<TaskComment> getTaskCommentList() {
 		return taskCommentList;
 	}
-	public void setTaskCommentList(List<Task_Comment> taskCommentList) {
+	public void setTaskCommentList(List<TaskComment> taskCommentList) {
 		this.taskCommentList = taskCommentList;
 	}
-	public List<Task_Status> getTaskStatusList() {
+	public List<TaskStatus> getTaskStatusList() {
 		return taskStatusList;
 	}
-	public void setTaskStatusList(List<Task_Status> taskStatusList) {
+	public void setTaskStatusList(List<TaskStatus> taskStatusList) {
 		this.taskStatusList = taskStatusList;
 	}
 }

@@ -9,16 +9,27 @@ import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
 import com.raytrex.erp.service.login.microsoft.ADALService;
+import com.raytrex.frontier.repository.DepartmentRepository;
 import com.raytrex.frontier.repository.EmployeeRepository;
+import com.raytrex.frontier.repository.PermissionRepository;
+import com.raytrex.frontier.repository.RoleRepository;
 import com.raytrex.frontier.repository.bean.Employee;
 import com.raytrex.frontier.repository.bean.EmployeeInfo;
 
 @Service
 public class EmployeeService {
 	@Autowired
+	private ADALService adalService;
+	
+	@Autowired
 	private EmployeeRepository employeeRepository;
 	@Autowired
-	private ADALService adalService;
+	private DepartmentRepository departmentRepository;
+	@Autowired
+	private RoleRepository roleRepository;
+	@Autowired
+	private PermissionRepository permissionRepository;
+	
 
 	public void initEmployeeRepositoryFromAzure(String access_token){
 		String userListString = adalService.listUsers(access_token);
@@ -45,5 +56,9 @@ public class EmployeeService {
 				employeeRepository.save(employeesList);
 			}
 		}
+	}
+	
+	public Employee saveEmployee(Employee employee){
+		return employeeRepository.saveAndFlush(employee);
 	}
 }

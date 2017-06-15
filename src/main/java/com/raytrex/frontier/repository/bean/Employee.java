@@ -27,7 +27,7 @@ public class Employee implements Serializable{
 	@JoinColumn(name="uid")
 	private EmployeeInfo employeesInfo;
 	
-	@OneToMany
+	@OneToMany(cascade=CascadeType.ALL)
 	@JoinColumn(name="uid")
 	private List<EmployeeRoles> roles;
 

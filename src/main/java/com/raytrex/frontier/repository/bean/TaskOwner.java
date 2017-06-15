@@ -8,9 +8,11 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
-public class Task_Owner implements Serializable {
+@Table(name="task_owner")
+public class TaskOwner implements Serializable {
 	@Id
 	@GeneratedValue
 	@Column(name="task_owner_serial_no")
@@ -68,7 +70,7 @@ public class Task_Owner implements Serializable {
 
 	@Override
 	public boolean equals(Object obj) {
-		if(obj instanceof Task_Owner){
+		if(obj instanceof TaskOwner){
 			Field[] fields = this.getClass().getDeclaredFields();
 			boolean isSameValue = true;
 			for(Field field : fields){

@@ -13,12 +13,6 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 public class Role implements Serializable{
 	@Id
-	@GeneratedValue(generator = "UUID")
-	@GenericGenerator(
-		name = "UUID",
-		strategy = "org.hibernate.id.UUIDGenerator"
-	)
-	@Column(name="dep_id")
 	private String depId;
 	
 	@Column(name="role_id")

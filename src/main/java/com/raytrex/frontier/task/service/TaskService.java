@@ -14,8 +14,8 @@ import com.raytrex.frontier.repository.SerialNoRepository;
 import com.raytrex.frontier.repository.TaskRepository;
 import com.raytrex.frontier.repository.bean.SerialNo;
 import com.raytrex.frontier.repository.bean.Task;
-import com.raytrex.frontier.repository.bean.Task_Owner;
-import com.raytrex.frontier.repository.bean.Task_Status;
+import com.raytrex.frontier.repository.bean.TaskOwner;
+import com.raytrex.frontier.repository.bean.TaskStatus;
 import com.raytrex.rpv.repository.bean.OrderList;
 import com.raytrex.rpv.repository.bean.OrderListRepository;
 
@@ -68,16 +68,16 @@ public class TaskService {
 			}
 			 
 			// 移除已經不在Task中的Owner
-			List<Task_Owner> ownerList = task.getTaskOwnerList();
-			Iterator<Task_Owner> ownerIt = ownerList.iterator();
+			List<TaskOwner> ownerList = task.getTaskOwnerList();
+			Iterator<TaskOwner> ownerIt = ownerList.iterator();
 			while (ownerIt.hasNext()) {
-				Task_Owner owner = ownerIt.next();
+				TaskOwner owner = ownerIt.next();
 				if (owner.getLeaveDate() != null) {
 					ownerIt.remove();
 				}
 			}
 			// 只留一筆Task Status
-			List<Task_Status> newTaskStatus = new ArrayList<Task_Status>();
+			List<TaskStatus> newTaskStatus = new ArrayList<TaskStatus>();
 			newTaskStatus.add(task.getTaskStatusList().get(0));
 			task.setTaskStatusList(newTaskStatus);
 		}
@@ -90,18 +90,18 @@ public class TaskService {
 	 * @param task_owner
 	 * @return 更新後的Task內容
 	 */
-	public Task addOwners(String task_no, List<Task_Owner> task_owner) {
+	public Task addOwners(String task_no, List<TaskOwner> task_owner) {
 		Task task = taskRepository.findOne(task_no);
 		if (task != null) {
 			// Task Owner list內有資料就進行比對
 			if (task.getTaskOwnerList() != null && !task.getTaskOwnerList().isEmpty()) {
 				// 過濾已經在專案中的重複加入的人
-				for (Task_Owner owner : task.getTaskOwnerList()) {
+				for (TaskOwner owner : task.getTaskOwnerList()) {
 					if (owner.getLeaveDate() != null)
 						continue; // 已離開專案的人可以被加入
-					Iterator<Task_Owner> readyIntoTaskOwnerIt = task_owner.iterator();
+					Iterator<TaskOwner> readyIntoTaskOwnerIt = task_owner.iterator();
 					while (readyIntoTaskOwnerIt.hasNext()) {
-						Task_Owner readyIntoTask = readyIntoTaskOwnerIt.next();
+						TaskOwner readyIntoTask = readyIntoTaskOwnerIt.next();
 						if (readyIntoTask.getUid().equals(owner.getUid())) {
 							readyIntoTaskOwnerIt.remove();
 						}
@@ -114,7 +114,7 @@ public class TaskService {
 		return task;
 	}
 
-	public Task setTaskStatus(String task_no, Task_Status task_status) {
+	public Task setTaskStatus(String task_no, TaskStatus task_status) {
 		Task task = taskRepository.findOne(task_no);
 		if (task != null) {
 			// 確認資料Task status是否正確
@@ -139,7 +139,7 @@ public class TaskService {
 			task.setCustomerId(orderList.getCustomer()+"-"+orderList.getLocation());
 //			task.setPermissionId(parent_task.getPermissionId());
 			//新增Owner
-			Task_Owner owner = new Task_Owner();
+			TaskOwner owner = new TaskOwner();
 			owner.setUid(owner_uid);
 			owner.setJoinDate(new Date());
 			owner.setTaskNo(task.getTaskNo());
@@ -163,7 +163,7 @@ public class TaskService {
 			task.setParentTaskNo(parent_task_no);
 			task.setCustomerId(parent_task.getCustomerId());
 			task.setPermissionId(parent_task.getPermissionId());
-			Task_Owner owner = new Task_Owner();
+			TaskOwner owner = new TaskOwner();
 			owner.setUid(owner_uid);
 			owner.setJoinDate(new Date());
 			owner.setTaskNo(task.getTaskNo());

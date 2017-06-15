@@ -6,9 +6,11 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
-public class Task_Status implements Serializable {
+@Table(name="task_status")
+public class TaskStatus implements Serializable {
 	@Id
 	@Column(name="task_status_id")
 	private Integer taskStatusId;
