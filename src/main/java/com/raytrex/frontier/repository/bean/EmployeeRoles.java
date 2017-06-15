@@ -8,9 +8,11 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 @Entity
-public class Employees_Roles implements Serializable{
+@Table(name="employee_roles")
+public class EmployeeRoles implements Serializable{
 	@Id
 	private String uid;
 	

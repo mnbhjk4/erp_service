@@ -1,4 +1,4 @@
-package com.raytrex.erp;
+package com.raytrex;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -60,7 +60,7 @@ public class FrontierRepositoryConfig {
 		return emf.getObject();
 	}
 
-	@Bean(name = "forntierTransactionManager")
+	@Bean(name = "frontierTransactionManager")
 	public PlatformTransactionManager transactionManager() {
 		JpaTransactionManager tm = new JpaTransactionManager();
 		tm.setEntityManagerFactory(entityManagerFactory());

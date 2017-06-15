@@ -1,4 +1,4 @@
-package com.raytrex.erp.service;
+package com.raytrex.frontier.task.service;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -16,6 +16,8 @@ import com.raytrex.frontier.repository.bean.SerialNo;
 import com.raytrex.frontier.repository.bean.Task;
 import com.raytrex.frontier.repository.bean.Task_Owner;
 import com.raytrex.frontier.repository.bean.Task_Status;
+import com.raytrex.rpv.repository.bean.OrderList;
+import com.raytrex.rpv.repository.bean.OrderListRepository;
 
 @Service
 public class TaskService {
@@ -23,6 +25,8 @@ public class TaskService {
 	private TaskRepository taskRepository;
 	@Autowired
 	private SerialNoRepository serialRepository;
+	@Autowired
+	private OrderListRepository orderListRepository;
 
 	/**
 	 * 用Project number來取得全部的Task與其Sub task<br>
@@ -62,7 +66,7 @@ public class TaskService {
 					}
 				}
 			}
-			
+			 
 			// 移除已經不在Task中的Owner
 			List<Task_Owner> ownerList = task.getTaskOwnerList();
 			Iterator<Task_Owner> ownerIt = ownerList.iterator();
@@ -122,24 +126,32 @@ public class TaskService {
 		}
 		return task;
 	}
-	public Task addTask(String project_number,String name){
-		SimpleDateFormat sdf = new SimpleDateFormat("YYMMDD");
-		if(!name.isEmpty()){
+	public Task addTask(String project_number,String name,String owner_uid){
+		OrderList orderList = orderListRepository.findOneByProjectNumber(project_number);
+		if(orderList != null){
+			SimpleDateFormat sdf = new SimpleDateFormat("YYMMDD");
 			SerialNo serialNo = serialRepository.findOne("DP");
 			Task task = new Task();
 			task.setName(name);
-			task.setProjectNumber(project_number);
+			task.setProjectNumber(orderList.getProjectNumber());
 			task.setTaskNo("DP"+sdf.format(new Date())+(serialNo.getCount()+1));
-//			task.setParentTaskNo(parent_task_no);
-//			task.setCustomerId(parent_task.getCustomerId());
+			task.setParentTaskNo(null);
+			task.setCustomerId(orderList.getCustomer()+"-"+orderList.getLocation());
 //			task.setPermissionId(parent_task.getPermissionId());
+			//新增Owner
+			Task_Owner owner = new Task_Owner();
+			owner.setUid(owner_uid);
+			owner.setJoinDate(new Date());
+			owner.setTaskNo(task.getTaskNo());
+			task.getTaskOwnerList().add(owner);
+			
 			return taskRepository.save(task);
 		}else{
 			return null;
 		}
 	}
 	
-	public Task addSubtask(String parent_task_no,String name){
+	public Task addSubtask(String parent_task_no,String name,String owner_uid){
 		Task parent_task = taskRepository.findOne(parent_task_no);
 		SimpleDateFormat sdf = new SimpleDateFormat("YYMMDD");
 		if(parent_task != null){
@@ -151,6 +163,11 @@ public class TaskService {
 			task.setParentTaskNo(parent_task_no);
 			task.setCustomerId(parent_task.getCustomerId());
 			task.setPermissionId(parent_task.getPermissionId());
+			Task_Owner owner = new Task_Owner();
+			owner.setUid(owner_uid);
+			owner.setJoinDate(new Date());
+			owner.setTaskNo(task.getTaskNo());
+			task.getTaskOwnerList().add(owner);
 			return taskRepository.save(task);
 		}else{
 			return null;

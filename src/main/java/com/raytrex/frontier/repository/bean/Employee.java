@@ -15,26 +15,21 @@ import javax.persistence.OneToOne;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-public class Employees implements Serializable{
+public class Employee implements Serializable{
 	@Id
-	@GeneratedValue(generator = "UUID")
-	@GenericGenerator(
-		name = "UUID",
-		strategy = "org.hibernate.id.UUIDGenerator"
-	)
 	private String uid;
 	
 	@Column(name="emp_no")
 	private String empNo;
 	private String mail;
 	
-	@OneToOne(cascade=CascadeType.PERSIST)
+	@OneToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="uid")
-	private Employees_Info employees_Info;
+	private EmployeeInfo employeesInfo;
 	
 	@OneToMany
 	@JoinColumn(name="uid")
-	private List<Employees_Roles> roles;
+	private List<EmployeeRoles> roles;
 
 	public String getUid() {
 		return uid;
@@ -60,19 +55,19 @@ public class Employees implements Serializable{
 		this.mail = mail;
 	}
 
-	public Employees_Info getEmployees_Info() {
-		return employees_Info;
+	public EmployeeInfo getEmployeesInfo() {
+		return employeesInfo;
 	}
 
-	public void setEmployees_Info(Employees_Info employees_Info) {
-		this.employees_Info = employees_Info;
+	public void setEmployeesInfo(EmployeeInfo employeesInfo) {
+		this.employeesInfo = employeesInfo;
 	}
 
-	public List<Employees_Roles> getRoles() {
+	public List<EmployeeRoles> getRoles() {
 		return roles;
 	}
 
-	public void setRoles(List<Employees_Roles> roles) {
+	public void setRoles(List<EmployeeRoles> roles) {
 		this.roles = roles;
 	}
 }

@@ -6,10 +6,12 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 
 @Entity
-public class Employees_Info implements Serializable{
+@Table(name="employee_info")
+public class EmployeeInfo implements Serializable{
 	@Id
 	private String uid;
 	@Column(name="first_name")
@@ -23,6 +25,9 @@ public class Employees_Info implements Serializable{
 	
 	@Column(name="birth_date")
 	private Date birthDate;
+	
+	@Column(name="preferred_language")
+	private String preferredLanguage = "zh_TW";
 	
 	private String gender;
 	
@@ -139,4 +144,14 @@ public class Employees_Info implements Serializable{
 	public void setLeaveDate(Date leaveDate) {
 		this.leaveDate = leaveDate;
 	}
+
+	public String getPreferredLanguage() {
+		return preferredLanguage;
+	}
+
+	public void setPreferredLanguage(String preferredLanguage) {
+		this.preferredLanguage = preferredLanguage;
+	}
+	
+	
 }

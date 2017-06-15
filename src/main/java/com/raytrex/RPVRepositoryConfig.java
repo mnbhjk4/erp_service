@@ -1,4 +1,4 @@
-package com.raytrex.erp;
+package com.raytrex;
 
 import java.util.Properties;
 
