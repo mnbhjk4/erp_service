@@ -4,11 +4,17 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
 public class Permission implements Serializable {
 	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(name="permission_serial")
+	private Integer permissionSerial;
+	
 	@Column(name="permssion_id")
 	private String permissionId;
 	@Column(name="role_id")
