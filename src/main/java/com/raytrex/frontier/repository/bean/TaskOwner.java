@@ -15,8 +15,8 @@ import javax.persistence.Table;
 public class TaskOwner implements Serializable {
 	@Id
 	@GeneratedValue
-	@Column(name="task_owner_serial_no")
-	private Integer taskOwnerSerialNo;
+	@Column(name="serial_no")
+	private Integer serialNo;
 	
 	@Column(name="task_no")
 	private String taskNo;
@@ -28,12 +28,12 @@ public class TaskOwner implements Serializable {
 	@Column(name="leave_date")
 	private Date leaveDate;
 
-	public Integer getTaskOwnerSerialNo() {
-		return taskOwnerSerialNo;
+	public Integer getSerialNo() {
+		return serialNo;
 	}
 
-	public void setTaskOwnerSerialNo(Integer taskOwnerSerialNo) {
-		this.taskOwnerSerialNo = taskOwnerSerialNo;
+	public void setSerialNo(Integer serialNo) {
+		this.serialNo = serialNo;
 	}
 
 	public String getTaskNo() {
