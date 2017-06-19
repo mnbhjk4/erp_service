@@ -49,12 +49,5 @@ public class TaskController {
 		}
 		return gson.toJson(jsonArray);
 	}
-	
-	@CrossOrigin(origins = { "*", "http://localhost:8100" })
-	@RequestMapping(value="/test",method=RequestMethod.GET)
-	public String test() {
-		Gson gson = new Gson();
-		List<OrderList> result = order.findAll();
-		return gson.toJson(result).toString();
-	}
+
 }

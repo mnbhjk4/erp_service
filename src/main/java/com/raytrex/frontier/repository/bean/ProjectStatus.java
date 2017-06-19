@@ -37,6 +37,8 @@ public class ProjectStatus {
 	
 	private String description;
 
+	private Integer priority;
+	
 	public String getStatusUuid() {
 		return statusUuid;
 	}
@@ -108,4 +110,14 @@ public class ProjectStatus {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
+	public Integer getPriority() {
+		return priority;
+	}
+
+	public void setPriority(Integer priority) {
+		this.priority = priority;
+	}
+	
+	
 }

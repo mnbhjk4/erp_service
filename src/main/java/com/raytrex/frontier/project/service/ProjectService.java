@@ -87,4 +87,8 @@ public class ProjectService {
 		}
 		return projectRespository.findAll();
 	}
+	
+	public List<Project> getProjectByUid(String uid){
+		return projectRespository.findProjectByProjectOwnerUid(uid);
+	}
 }
