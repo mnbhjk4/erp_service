@@ -30,7 +30,10 @@ public class EmployeeService {
 	@Autowired
 	private PermissionRepository permissionRepository;
 	
-
+	/**
+	 * 初始化Azure上所有的帳號,到Frontier的身上
+	 * @param access_token
+	 */
 	public void initEmployeeRepositoryFromAzure(String access_token){
 		String userListString = adalService.listUsers(access_token);
 		Gson gson = new Gson();

@@ -10,15 +10,14 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.raytrex.frontier.repository.ProjectRepository;
 import com.raytrex.frontier.repository.SerialNoRepository;
 import com.raytrex.frontier.repository.TaskRepository;
+import com.raytrex.frontier.repository.bean.Project;
 import com.raytrex.frontier.repository.bean.SerialNo;
 import com.raytrex.frontier.repository.bean.Task;
 import com.raytrex.frontier.repository.bean.TaskOwner;
 import com.raytrex.frontier.repository.bean.TaskStatus;
-import com.raytrex.rpv.repository.bean.OrderList;
-import com.raytrex.rpv.repository.bean.OrderListRepository;
-
 @Service
 public class TaskService {
 	@Autowired
@@ -26,7 +25,8 @@ public class TaskService {
 	@Autowired
 	private SerialNoRepository serialRepository;
 	@Autowired
-	private OrderListRepository orderListRepository;
+	private ProjectRepository projectRepository;
+
 
 	/**
 	 * 用Project number來取得全部的Task與其Sub task<br>
@@ -127,16 +127,16 @@ public class TaskService {
 		return task;
 	}
 	public Task addTask(String project_number,String name,String owner_uid){
-		OrderList orderList = orderListRepository.findOneByProjectNumber(project_number);
-		if(orderList != null){
+		Project project = projectRepository.findOne(project_number);
+		if(project != null){
 			SimpleDateFormat sdf = new SimpleDateFormat("YYMMDD");
 			SerialNo serialNo = serialRepository.findOne("DP");
 			Task task = new Task();
 			task.setName(name);
-			task.setProjectNumber(orderList.getProjectNumber());
+			task.setProjectNumber(project.getProjectNo());
 			task.setTaskNo("DP"+sdf.format(new Date())+(serialNo.getCount()+1));
 			task.setParentTaskNo(null);
-			task.setCustomerId(orderList.getCustomer()+"-"+orderList.getLocation());
+			task.setCustomerId(project.getCustomerId());
 //			task.setPermissionId(parent_task.getPermissionId());
 			//新增Owner
 			TaskOwner owner = new TaskOwner();

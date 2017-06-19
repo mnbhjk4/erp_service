@@ -1,8 +1,15 @@
 package com.raytrex.frontier.repository.bean;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+
 
 @Entity
 public class Project {
@@ -18,6 +25,16 @@ public class Project {
 	
 	@Column(name="permission_id")
 	private String permissionId;
+	
+	@OneToMany(cascade=CascadeType.ALL)
+	@JoinColumn(name="project_no")
+	private List<ProjectOwner> ownerList = new ArrayList<ProjectOwner>();
+	
+	@OneToMany(cascade=CascadeType.ALL)
+	@JoinColumn(name="project_no")
+	private List<ProjectStatus> statusList = new ArrayList<ProjectStatus>();
+	
+	
 
 	public String getProjectNo() {
 		return projectNo;
@@ -50,4 +67,24 @@ public class Project {
 	public void setPermissionId(String permissionId) {
 		this.permissionId = permissionId;
 	}
+
+	public List<ProjectOwner> getOwnerList() {
+		return ownerList;
+	}
+
+	public void setOwnerList(List<ProjectOwner> ownerList) {
+		this.ownerList = ownerList;
+	}
+
+	public List<ProjectStatus> getStatusList() {
+		return statusList;
+	}
+
+	public void setStatusList(List<ProjectStatus> statusList) {
+		this.statusList = statusList;
+	}
+
+	
+	
+	
 }

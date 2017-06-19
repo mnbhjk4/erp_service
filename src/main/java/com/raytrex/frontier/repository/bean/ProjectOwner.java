@@ -13,14 +13,15 @@ import javax.persistence.Table;
 @Table(name="project_owner")
 public class ProjectOwner {
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="owner_serial")
 	private Integer ownerSerial;
 	
 	@Column(name="project_no")
-	private String projectNo;
+	private String projectNo = "";
 	
-	private String uid;
+	@Column(name="uid")
+	private String uid = "";
 	
 	@Column(name="join_date")
 	private Date joinDate;
