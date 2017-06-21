@@ -1,4 +1,4 @@
-package com.raytrex.erp.service.login.microsoft;
+package com.raytrex.microsoft.service;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -233,4 +233,5 @@ public class ADALService {
 		}
 		return "";
 	}
+
 }

@@ -1,4 +1,4 @@
-package com.raytrex.erp.contorller;
+package com.raytrex.microsoft.controller;
 
 import java.util.Map;
 
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
-import com.raytrex.erp.service.login.microsoft.ADALService;
+import com.raytrex.microsoft.service.ADALService;
 
 @RestController
 @RequestMapping("/adal")
@@ -27,6 +27,12 @@ public class ADALController {
 	@RequestMapping("/getTokenByRefreshToken")
 	public String getTokenByRefreshToken( String refresh_token,String scope,String redirectUri){
 		return adalService.getTokenByRefreshToken(refresh_token, scope, redirectUri);
+	}
+	
+	@CrossOrigin(origins = {"*","http://localhost:8100"})
+	@RequestMapping("/getCompanyUserMap")
+	public String getCompanyUserMap( String access_token){
+		return adalService.listUsers(access_token);
 	}
 	
 	@CrossOrigin(origins = {"*","http://localhost:8100"})

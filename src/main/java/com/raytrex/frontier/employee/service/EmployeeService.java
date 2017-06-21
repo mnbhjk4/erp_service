@@ -8,13 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
-import com.raytrex.erp.service.login.microsoft.ADALService;
 import com.raytrex.frontier.repository.DepartmentRepository;
 import com.raytrex.frontier.repository.EmployeeRepository;
 import com.raytrex.frontier.repository.PermissionRepository;
 import com.raytrex.frontier.repository.RoleRepository;
 import com.raytrex.frontier.repository.bean.Employee;
 import com.raytrex.frontier.repository.bean.EmployeeInfo;
+import com.raytrex.microsoft.service.ADALService;
 
 @Service
 public class EmployeeService {

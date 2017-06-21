@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
-import com.raytrex.erp.service.login.microsoft.ADALService;
 import com.raytrex.frontier.employee.service.EmployeeService;
 import com.raytrex.frontier.repository.EmployeeRepository;
 import com.raytrex.frontier.repository.bean.Employee;
 import com.raytrex.frontier.repository.bean.EmployeeInfo;
+import com.raytrex.microsoft.service.ADALService;
 
 @RestController
 @RequestMapping("/user")

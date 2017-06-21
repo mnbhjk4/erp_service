@@ -28,9 +28,10 @@ public class ProjectController {
 	
 	@RequestMapping("/initProjectFromRPV")
 	public String initProjecFromRPV(){
-//		List<Project> projectList = projectService.initProjectFromRVP();
+		List<Project> projectList = projectService.initProjectFromRVP();
 		Gson gson = new Gson();
-		return gson.toJson("Please unmark init project from RPV porject this is important!");
+//		return gson.toJson("Please unmark init project from RPV porject this is important!");
+		return gson.toJson(projectList);
 	}
 	
 	@CrossOrigin(origins = { "*", "http://localhost:8100" })
@@ -47,11 +48,13 @@ public class ProjectController {
 			e.printStackTrace();
 		}
 		Gson gson = new Gson();
+		List<Project> projectList= new ArrayList<Project>();
 		if(p.containsKey("uid")){
-			List<Project> projectList = projectService.getProjectByUid(p.getProperty("uid"));
-			return gson.toJson(projectList);
-		}else{
-			return gson.toJson(new ArrayList<String>());
+			projectList = projectService.getProjectByUid(p.getProperty("uid"));
+			if(!projectList.isEmpty()){
+				projectList = projectService.sortProjectList(projectList);
+			}
 		}
+		return gson.toJson(projectList);
 	}
 }

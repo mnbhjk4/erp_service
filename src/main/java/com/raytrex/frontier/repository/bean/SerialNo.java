@@ -6,6 +6,8 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 @Entity
@@ -44,5 +46,17 @@ public class SerialNo implements Serializable {
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
 	}
+	@PrePersist
+	public void onCreate(){
+		if(this.updateTime == null){
+			this.updateTime = new Date();
+		}
+	}
 	
+	@PreUpdate
+	public void onUpdate(){
+		if(this.updateTime == null){
+			this.updateTime = new Date();
+		}
+	}
 }

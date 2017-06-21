@@ -5,13 +5,21 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 @Entity
 @Table(name="task_status")
 public class TaskStatus implements Serializable {
+	public static String NotAction = "Not Action";
+	public static String Progressing = "Progressing";
+	public static String Done = "Done";
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="task_status_id")
 	private Integer taskStatusId;
 	
@@ -23,26 +31,29 @@ public class TaskStatus implements Serializable {
 	
 	private String status;
 	
-	private Integer priority;
+	private Integer priority = 6;
 	
-	@Column(name="startDate")
-	private Date start_date;
+	@Column(name="start_date")
+	private Date startDate;
 	
-	@Column(name="dueDate")
-	private Date due_date;
+	@Column(name="due_date")
+	private Date dueDate;
 	
-	@Column(name="alertDate")
-	private Date alert_date;
+	@Column(name="alert_Date")
+	private Date alertDate;
 	
-	@Column(name="endDate")
-	private Date end_date;
+	@Column(name="end_date")
+	private Date endDate;
 	
-	@Column(name="taskIndex")
-	private Integer task_index;
+	@Column(name="task_index")
+	private Integer taskIndex;
 	
-	@Column(name="parentTaskNo")
-	private String parent_task_no;
-
+	@Column(name="parent_task_no")
+	private String parentTaskNo;
+	
+	@Column(name="description")
+	private String description;
+	
 	public Integer getTaskStatusId() {
 		return taskStatusId;
 	}
@@ -83,51 +94,73 @@ public class TaskStatus implements Serializable {
 		this.priority = priority;
 	}
 
-	public Date getStart_date() {
-		return start_date;
+	public Date getStartDate() {
+		return startDate;
 	}
 
-	public void setStart_date(Date start_date) {
-		this.start_date = start_date;
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
 	}
 
-	public Date getDue_date() {
-		return due_date;
+	public Date getDueDate() {
+		return dueDate;
 	}
 
-	public void setDue_date(Date due_date) {
-		this.due_date = due_date;
+	public void setDueDate(Date dueDate) {
+		this.dueDate = dueDate;
 	}
 
-	public Date getAlert_date() {
-		return alert_date;
+	public Date getAlertDate() {
+		return alertDate;
 	}
 
-	public void setAlert_date(Date alert_date) {
-		this.alert_date = alert_date;
+	public void setAlertDate(Date alertDate) {
+		this.alertDate = alertDate;
 	}
 
-	public Date getEnd_date() {
-		return end_date;
+	public Date getEndDate() {
+		return endDate;
 	}
 
-	public void setEnd_date(Date end_date) {
-		this.end_date = end_date;
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
 	}
 
-	public Integer getTask_index() {
-		return task_index;
+	public Integer getTaskIndex() {
+		return taskIndex;
 	}
 
-	public void setTask_index(Integer task_index) {
-		this.task_index = task_index;
+	public void setTaskIndex(Integer taskIndex) {
+		this.taskIndex = taskIndex;
 	}
 
-	public String getParent_task_no() {
-		return parent_task_no;
+	public String getParentTaskNo() {
+		return parentTaskNo;
 	}
 
-	public void setParent_task_no(String parent_task_no) {
-		this.parent_task_no = parent_task_no;
+	public void setParentTaskNo(String parentTaskNo) {
+		this.parentTaskNo = parentTaskNo;
+	}
+	
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	@PrePersist
+	public void onCreate(){
+		if(this.updateTime == null){
+			this.updateTime = new Date();
+		}
+	}
+	
+	@PreUpdate
+	public void onUpdate(){
+		if(this.updateTime == null){
+			this.updateTime = new Date();
+		}
 	}
 }
