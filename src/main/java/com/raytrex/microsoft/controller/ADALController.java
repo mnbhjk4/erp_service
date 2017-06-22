@@ -1,14 +1,10 @@
 package com.raytrex.microsoft.controller;
 
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.google.gson.Gson;
 import com.raytrex.microsoft.service.ADALService;
 
 @RestController
@@ -37,8 +33,8 @@ public class ADALController {
 	
 	@CrossOrigin(origins = {"*","http://localhost:8100"})
 	@RequestMapping("/getUserProfilePhoto")
-	public String getUserProfilePhoto(String access_token){
-		return adalService.getUserProfilePhoto(access_token);
+	public String getUserProfilePhoto(String access_token,String uid,String name){
+		return adalService.getUserProfilePhoto(access_token,uid,name);
 	}
 	
 	
