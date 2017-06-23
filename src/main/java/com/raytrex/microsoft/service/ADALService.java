@@ -1,21 +1,15 @@
 package com.raytrex.microsoft.service;
 
-import java.awt.Image;
-import java.awt.image.BufferedImage;
+
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Base64.Encoder;
 import java.util.Map;
 
-import javax.imageio.ImageIO;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
@@ -31,7 +25,6 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
-import com.raytrex.frontier.utils.NameIcon;
 
 
 @Service
@@ -104,9 +97,9 @@ public class ADALService {
 		HttpResponse response = client.execute(post);
 		int responseCode = response.getStatusLine().getStatusCode();
 
-		System.out.println("Sending 'POST' request to URL : " + uri.toString());
-		System.out.println("Post parameters : " + formNameValuePairList);
-		System.out.println("Response Code : " + responseCode);
+		log.info("Sending 'POST' request to URL : " + uri.toString());
+		log.info("Post parameters : " + formNameValuePairList);
+		log.info("Response Code : " + responseCode);
 
 		BufferedReader rd = new BufferedReader(
 	                new InputStreamReader(response.getEntity().getContent()));
@@ -138,8 +131,8 @@ public class ADALService {
 			HttpResponse response = client.execute(get);
 			int responseCode = response.getStatusLine().getStatusCode();
 
-			System.out.println("Sending 'GET' request to URL : " + uri.toString());
-			System.out.println("Response Code : " + responseCode);
+			log.info("Sending 'GET' request to URL : " + uri.toString());
+			log.info("Response Code : " + responseCode);
 
 			BufferedReader rd = new BufferedReader(
 		                new InputStreamReader(response.getEntity().getContent()));
@@ -165,8 +158,8 @@ public class ADALService {
 		return "";
 	}
 	
-	public String getUserProfilePhoto(String access_token,String uid,String name){
-		String base64Image = "";
+	public byte[] getUserProfilePhoto(String access_token,String uid,String name){
+		byte[] image = new byte[0];
 		try {
 			URI uri = new URI("https://graph.microsoft.com/v1.0/users/"+uid+"/photo/$value");
 			HttpClient client = HttpClientBuilder.create().build();
@@ -177,16 +170,14 @@ public class ADALService {
 			HttpResponse response = client.execute(get);
 			int responseCode = response.getStatusLine().getStatusCode();
 
-			System.out.println("Sending 'GET' request to URL : " + uri.toString());
-			System.out.println("Response Code : " + responseCode);
-			Encoder encoder = Base64.getEncoder();
-			if(responseCode == 200){
+			log.info("Sending 'GET' request to URL : " + uri.toString());
+			log.info("Response Code : " + responseCode);
+	
+			if(responseCode >= 200  && responseCode <= 299){
 				InputStream input = response.getEntity().getContent();
 				
 				if(input != null){
-					byte[] src = null;
-					src = IOUtils.toByteArray(input);
-					base64Image = encoder.encodeToString(src);
+					image = IOUtils.toByteArray(input);
 				}
 			}
 		} catch (URISyntaxException e) {
@@ -199,7 +190,7 @@ public class ADALService {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return base64Image;
+		return image;
 	}
 	
 	public String listUsers(String access_token){
@@ -215,8 +206,8 @@ public class ADALService {
 			HttpResponse response = client.execute(get);
 			int responseCode = response.getStatusLine().getStatusCode();
 
-			System.out.println("Sending 'GET' request to URL : " + uri.toString());
-			System.out.println("Response Code : " + responseCode);
+			log.info("Sending 'GET' request to URL : " + uri.toString());
+			log.info("Response Code : " + responseCode);
 
 			BufferedReader rd = new BufferedReader(
 		                new InputStreamReader(response.getEntity().getContent()));

@@ -6,6 +6,7 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 
 
@@ -49,6 +50,10 @@ public class EmployeeInfo implements Serializable{
 	@Column(name="leave_date")
 	private Date leaveDate;
 
+	@Lob
+	@Column(name="image")
+	private byte[] image;
+	
 	public String getUid() {
 		return uid;
 	}
@@ -151,6 +156,14 @@ public class EmployeeInfo implements Serializable{
 
 	public void setPreferredLanguage(String preferredLanguage) {
 		this.preferredLanguage = preferredLanguage;
+	}
+
+	public byte[] getImage() {
+		return image;
+	}
+
+	public void setImage(byte[] image) {
+		this.image = image;
 	}
 	
 	

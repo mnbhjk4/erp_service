@@ -27,9 +27,9 @@ public class Employee implements Serializable{
 	@JoinColumn(name="uid")
 	private EmployeeInfo employeesInfo;
 	
-	@OneToMany(cascade=CascadeType.ALL)
-	@JoinColumn(name="uid")
-	private List<EmployeeRoles> roles;
+//	@OneToMany(cascade=CascadeType.ALL)
+//	@JoinColumn(name="uid")
+//	private List<EmployeeRoles> roles;
 
 	public String getUid() {
 		return uid;
@@ -63,11 +63,11 @@ public class Employee implements Serializable{
 		this.employeesInfo = employeesInfo;
 	}
 
-	public List<EmployeeRoles> getRoles() {
-		return roles;
-	}
-
-	public void setRoles(List<EmployeeRoles> roles) {
-		this.roles = roles;
-	}
+//	public List<EmployeeRoles> getRoles() {
+//		return roles;
+//	}
+//
+//	public void setRoles(List<EmployeeRoles> roles) {
+//		this.roles = roles;
+//	}
 }

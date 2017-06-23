@@ -53,6 +53,10 @@ public class EmployeeService {
 					info.setLastName(value.get("displayName") == null?"":value.get("displayName").toString());
 					info.setFirstName(value.get("givenName") == null?"":value.get("givenName").toString());
 					info.setPreferredLanguage(value.get("preferredLanguage") == null?"zh_TW": value.get("preferredLanguage").toString());
+					byte[] image = adalService.getUserProfilePhoto(access_token, employees.getUid(), info.getLastName());
+					if(image != null){
+						info.setImage(image);
+					}
 					employees.setEmployeesInfo(info);
 					employeesList.add(employees);
 				}
@@ -61,7 +65,11 @@ public class EmployeeService {
 		}
 	}
 	
+	public List<Employee> getCompanyUsers(){
+		return employeeRepository.findAll();
+	}
+	
 	public Employee saveEmployee(Employee employee){
-		return employeeRepository.saveAndFlush(employee);
+		return employeeRepository.save(employee);
 	}
 }

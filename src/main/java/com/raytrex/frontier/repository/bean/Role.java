@@ -13,6 +13,7 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 public class Role implements Serializable{
 	@Id
+	@Column(name="dep_id")
 	private String depId;
 	
 	@Column(name="role_id")
@@ -25,7 +26,7 @@ public class Role implements Serializable{
 	private String roleLevel;
 	
 	@OneToOne
-	@JoinColumn(name="depId")
+	@JoinColumn(name="dep_id")
 	private Department department;
 
 	public String getDepId() {
