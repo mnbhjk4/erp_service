@@ -33,8 +33,9 @@ public class EmployeeService {
 	/**
 	 * 初始化Azure上所有的帳號,到Frontier的身上
 	 * @param access_token
+	 * @return 
 	 */
-	public void initEmployeeRepositoryFromAzure(String access_token){
+	public List<Employee> initEmployeeRepositoryFromAzure(String access_token){
 		String userListString = adalService.listUsers(access_token);
 		Gson gson = new Gson();
 		Map result = gson.fromJson(userListString, Map.class);
@@ -44,15 +45,23 @@ public class EmployeeService {
 				List<Map> valueList = (List<Map>) valueObject;
 				List<Employee> employeesList = new ArrayList<Employee>();
 				for(Map value : valueList){
-					Employee employees = new Employee();
-					employees.setUid(value.get("id").toString());
+					String uid = value.get("id").toString();
+					Employee employees = employeeRepository.findOne(uid);
+					if(employees == null){
+						employees = new Employee();
+						employees.setUid(value.get("id").toString());
+					}
+					
 					employees.setMail(value.get("mail") == null?"":value.get("mail").toString());
 					employees.setEmpNo(employees.getUid());
-					EmployeeInfo info = new EmployeeInfo();
+					EmployeeInfo info = employees.getEmployeesInfo();
+					if(info == null){
+						info = new EmployeeInfo();
+					}
 					info.setUid(employees.getUid());
 					info.setLastName(value.get("displayName") == null?"":value.get("displayName").toString());
 					info.setFirstName(value.get("givenName") == null?"":value.get("givenName").toString());
-					info.setPreferredLanguage(value.get("preferredLanguage") == null?"zh_TW": value.get("preferredLanguage").toString());
+					info.setPreferredLanguage(value.get("preferredLanguage") == null?"zh-TW": value.get("preferredLanguage").toString());
 					byte[] image = adalService.getUserProfilePhoto(access_token, employees.getUid(), info.getLastName());
 					if(image != null){
 						info.setImage(image);
@@ -63,6 +72,7 @@ public class EmployeeService {
 				employeeRepository.save(employeesList);
 			}
 		}
+		return employeeRepository.findAll();
 	}
 	
 	public List<Employee> getCompanyUsers(){

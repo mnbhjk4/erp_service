@@ -28,10 +28,10 @@ public class EmployeeController {
 	private ADALService adalService;
 	
 	@CrossOrigin(origins = {"*","http://localhost:8100"})
-	@RequestMapping("/token")
-	public @ResponseBody String setToken(String token) {
-		employeeService.initEmployeeRepositoryFromAzure(token);
-		return "[]";
+	@RequestMapping("/initEmployee")
+	public String setToken(String token) {
+		Gson gson = new Gson();
+		return gson.toJson(employeeService.initEmployeeRepositoryFromAzure(token));
 	}
 	
 	@CrossOrigin(origins = {"*","http://localhost:8100"})
@@ -51,7 +51,6 @@ public class EmployeeController {
 					if(!base64Image.isEmpty()){
 						empInfoObj.addProperty("image", "data:image/jpeg;base64,"+base64Image);
 					}
-					
 				}
 			}
 			array.add(obj);
