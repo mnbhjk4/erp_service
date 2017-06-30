@@ -1,12 +1,17 @@
 package com.raytrex.frontier.repository.bean;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.Date;
+import java.util.UUID;
 
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -14,6 +19,7 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 @Table(name="task_comment")
 public class TaskComment implements Serializable{
+	
 	@Id
 	@GeneratedValue(generator = "UUID")
 	@GenericGenerator(
@@ -22,14 +28,14 @@ public class TaskComment implements Serializable{
 	)
 	@Column(name="task_comment_uuid")
 	private String taskCommentUuid;
-	
-	@Column(name="task_no")
+
+	@Column(name="task_no",nullable=false)
 	private String taskNo;
 	
 	private String comment;
 
 	@Column(name="comment_date")
-	private Date commentDate;
+	private Timestamp commentDate;
 	private String uid;
 	
 	@Column(name="attach_uuid")
@@ -59,11 +65,11 @@ public class TaskComment implements Serializable{
 		this.comment = comment;
 	}
 
-	public Date getCommentDate() {
+	public Timestamp getCommentDate() {
 		return commentDate;
 	}
 
-	public void setCommentDate(Date commentDate) {
+	public void setCommentDate(Timestamp commentDate) {
 		this.commentDate = commentDate;
 	}
 
@@ -83,5 +89,20 @@ public class TaskComment implements Serializable{
 		this.attachUuid = attachUuid;
 	}
 	
+	@PrePersist
+	public void onCreate(){
+		if(this.taskCommentUuid == null || this.taskCommentUuid.isEmpty()){
+			this.taskCommentUuid = UUID.randomUUID().toString();
+		}
+		this.commentDate = new Timestamp(System.currentTimeMillis());
+		
+	}
 	
+	@PreUpdate
+	public void onUpdate(){
+		if(this.taskCommentUuid == null || this.taskCommentUuid.isEmpty()){
+			this.taskCommentUuid = UUID.randomUUID().toString();
+		}
+		this.commentDate = new Timestamp(System.currentTimeMillis());
+	}
 }

@@ -3,8 +3,10 @@ package com.raytrex.frontier.repository.bean;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
@@ -13,7 +15,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name="employee_roles")
 public class EmployeeRoles implements Serializable{
-	@Id
+	@Column(name="uid")
 	private String uid;
 	
 	@Id
@@ -26,7 +28,7 @@ public class EmployeeRoles implements Serializable{
 	@Column(name="to_date")
 	private Date toDate;
 	
-	@OneToOne
+	@OneToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="role_id")
 	private Role role;
 

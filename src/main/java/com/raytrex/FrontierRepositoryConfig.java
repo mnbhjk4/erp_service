@@ -1,5 +1,7 @@
 package com.raytrex;
 
+import java.util.Properties;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
@@ -56,6 +58,9 @@ public class FrontierRepositoryConfig {
 		emf.setJpaVendorAdapter(jpaVendorAdapter);
 		emf.setPackagesToScan("com.raytrex.frontier.repository","com.raytrex.frontier.repository.bean");
 		emf.setPersistenceUnitName("default"); // <- giving 'default' as name
+		Properties p = new Properties();
+		p.setProperty("hibernate.event.merge.entity_copy_observer", "allow");
+		emf.setJpaProperties(p);
 		emf.afterPropertiesSet();
 		return emf.getObject();
 	}

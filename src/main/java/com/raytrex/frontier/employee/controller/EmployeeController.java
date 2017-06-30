@@ -36,7 +36,7 @@ public class EmployeeController {
 	
 	@CrossOrigin(origins = {"*","http://localhost:8100"})
 	@RequestMapping("/getCompanyUsers")
-	public String getCompanyUser(String access_token){
+	public String getCompanyUser(){
 		List<Employee> employees = employeeService.getCompanyUsers();
 		Gson gson = new Gson();
 		JsonArray array = new JsonArray();

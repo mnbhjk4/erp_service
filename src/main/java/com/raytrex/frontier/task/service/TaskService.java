@@ -4,14 +4,18 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.raytrex.frontier.repository.EmployeeRepository;
 import com.raytrex.frontier.repository.ProjectRepository;
 import com.raytrex.frontier.repository.SerialNoRepository;
@@ -20,6 +24,7 @@ import com.raytrex.frontier.repository.bean.Employee;
 import com.raytrex.frontier.repository.bean.Project;
 import com.raytrex.frontier.repository.bean.SerialNo;
 import com.raytrex.frontier.repository.bean.Task;
+import com.raytrex.frontier.repository.bean.TaskComment;
 import com.raytrex.frontier.repository.bean.TaskOwner;
 import com.raytrex.frontier.repository.bean.TaskStatus;
 import com.raytrex.rpv.repository.OrderListRepository;
@@ -54,7 +59,7 @@ public class TaskService {
 				status.setDueDate(order.getRaytrexPoDate());
 				status.setEndDate(order.getRaytrexPoDate());
 				status.setPriority(6);
-				status.setTask_no(task.getTaskNo());
+				status.setTaskNo(task.getTaskNo());
 				status.setStatus(TaskStatus.Done);
 				status.setDescription(project.getStatusList().get(0).getDescription());
 				task.getTaskStatusList().add(status);
@@ -94,7 +99,7 @@ public class TaskService {
 				}
 				status.setDueDate(order.getInstallHW());
 
-				status.setTask_no(task.getTaskNo());
+				status.setTaskNo(task.getTaskNo());
 				task.getTaskStatusList().add(status);
 				taskRepository.save(task);
 			}
@@ -124,7 +129,7 @@ public class TaskService {
 				}
 				status.setDueDate(order.getInstallSW());
 				
-				status.setTask_no(task.getTaskNo());
+				status.setTaskNo(task.getTaskNo());
 				task.getTaskStatusList().add(status);
 				
 				taskRepository.save(task);
@@ -154,7 +159,7 @@ public class TaskService {
 					status.setStatus(TaskStatus.Done);
 				}
 				status.setDueDate(order.getInstallMeasure());
-				status.setTask_no(task.getTaskNo());
+				status.setTaskNo(task.getTaskNo());
 				task.getTaskStatusList().add(status);
 				
 				taskRepository.save(task);
@@ -185,7 +190,7 @@ public class TaskService {
 				}
 				status.setDueDate(order.getUat());
 				
-				status.setTask_no(task.getTaskNo());
+				status.setTaskNo(task.getTaskNo());
 				task.getTaskStatusList().add(status);
 				
 				taskRepository.save(task);
@@ -215,7 +220,7 @@ public class TaskService {
 					status.setStatus(TaskStatus.Done);
 				}
 				status.setDueDate(order.getFat());
-				status.setTask_no(task.getTaskNo());
+				status.setTaskNo(task.getTaskNo());
 				task.getTaskStatusList().add(status);
 				
 				taskRepository.save(task);
@@ -245,7 +250,7 @@ public class TaskService {
 					status.setStatus(TaskStatus.Done);
 				}
 				status.setDueDate(order.getFat());
-				status.setTask_no(task.getTaskNo());
+				status.setTaskNo(task.getTaskNo());
 				task.getTaskStatusList().add(status);
 				
 				taskRepository.save(task);
@@ -314,13 +319,13 @@ public class TaskService {
 	}
 
 	/**
-	 * 在指定的Task no中新增一筆或多筆的Task owner (Join task)
+	 * 在指定的Task no中新增/修改 一筆或多筆的Task owner (Join task)
 	 * @param task_no
 	 * @param task_owner
 	 * @return 更新後的Task內容
 	 */
 	public Task addOwners(String task_no, List<TaskOwner> task_owner) {
-		Task task = taskRepository.findOne(task_no);
+		Task task = taskRepository.findOne(task_no); //找到原本的Task
 		if (task != null) {
 			// Task Owner list內有資料就進行比對
 			if (task.getTaskOwnerList() != null && !task.getTaskOwnerList().isEmpty()) {
@@ -347,8 +352,8 @@ public class TaskService {
 		Task task = taskRepository.findOne(task_no);
 		if (task != null) {
 			// 確認資料Task status是否正確
-			if (task_status.getTask_no() == null) {
-				task_status.setTask_no(task.getTaskNo());
+			if (task_status.getTaskNo() == null) {
+				task_status.setTaskNo(task.getTaskNo());
 			}
 			task.getTaskStatusList().add(task_status);
 			task = taskRepository.saveAndFlush(task);
@@ -415,5 +420,143 @@ public class TaskService {
 		String no = "DP"+sdf.format(new Date())+ df.format(count);
 		serialRepository.save(serialNo);
 		return no;
+	}
+
+
+	public void saveNewTask(Task task) {
+		String serialNo = getTaskSerialNo();
+		task.setTaskNo(serialNo);
+		if(task.getTaskCommentList() != null && !task.getTaskCommentList().isEmpty()){
+			for(TaskComment comment : task.getTaskCommentList()){
+				comment.setTaskNo(serialNo);
+			}
+		}
+		if(task.getTaskOwnerList() != null && !task.getTaskOwnerList().isEmpty()){
+			for(TaskOwner owner : task.getTaskOwnerList()){
+				owner.setTaskNo(serialNo);
+			}
+		}
+		if(task.getTaskStatusList() != null && !task.getTaskStatusList().isEmpty()){
+			for(TaskStatus status : task.getTaskStatusList()){
+				status.setTaskNo(serialNo);
+			}
+		}
+		taskRepository.save(task);
+	}
+
+
+	public Task getTask(String taskNo) {
+		return taskRepository.findOne(taskNo);
+	}
+
+
+	public void updateTask(Task subTask) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public Task save(Task task){
+		Task dbTask = taskRepository.findOne(task.getTaskNo());//先找看看是否有相同的Task No物件
+		if(dbTask == null){//是一筆新的Task
+			dbTask = task; 
+			dbTask.setTaskNo(getTaskSerialNo());//給予新的Task No
+		}
+		
+		//開始Merge attribute
+		if(dbTask.getAttachUuid() != task.getAttachUuid() && task.getAttachUuid() != null && !task.getAttachUuid().isEmpty()){
+			dbTask.setAttachUuid(task.getAttachUuid());
+		}
+		if(dbTask.getCustomerId() != task.getCustomerId() && task.getCustomerId() != null && !task.getCustomerId().isEmpty()){
+			dbTask.setCustomerId(task.getCustomerId());
+		}
+		if(dbTask.getName() != task.getName() && task.getName() != null && !task.getName().isEmpty()){
+			dbTask.setName(task.getName());
+		}
+		if(dbTask.getParentTaskNo() != task.getParentTaskNo()){
+			dbTask.setParentTaskNo(task.getParentTaskNo());
+		}
+		if(dbTask.getPermissionId() != task.getPermissionId() && task.getPermissionId() != null && !task.getPermissionId().isEmpty()){
+			dbTask.setPermissionId(task.getPermissionId());
+		}
+		if(dbTask.getProjectNumber() != task.getProjectNumber() && task.getProjectNumber() != null && !task.getProjectNumber().isEmpty()){
+			dbTask.setProjectNumber(task.getProjectNumber());
+		}
+		//Merge Task Owner
+		LinkedHashMap<String,TaskOwner> taskOwnerMap = new LinkedHashMap<String,TaskOwner>();//加入名單
+		HashSet<String> leaveUidSet = new HashSet<String>();//剔除名單(要準備Update Leave date)
+		for(TaskOwner dbOwner : dbTask.getTaskOwnerList()){
+			if(dbOwner.getLeaveDate() == null){
+				taskOwnerMap.put(dbOwner.getUid(), dbOwner);
+				leaveUidSet.add(dbOwner.getUid());
+			}
+		}
+		for(TaskOwner owner : task.getTaskOwnerList()){
+			if(taskOwnerMap.containsKey(owner.getUid())){
+				leaveUidSet.remove(owner.getUid()); //如果有重複的就update,並從剃除名單中移除
+			}else{
+				dbTask.getTaskOwnerList().add(owner); //加入名單
+			}
+		}
+		for(String uid : leaveUidSet){//開始將剃除名單中Update Leave date
+			taskOwnerMap.get(uid).setLeaveDate(new Date());
+		}
+		//Merge Task status
+		TaskStatus dbTaskStatus = dbTask.getTaskStatusList().get(0); //與最近一筆進行Compare
+		TaskStatus taskStatus = task.getTaskStatusList().get(0);
+		boolean addStatus = false;
+		if((dbTaskStatus.getAlertDate() == null && taskStatus.getAlertDate() != null) || 
+				(dbTaskStatus.getAlertDate() != null && taskStatus.getAlertDate() != null && dbTaskStatus.getAlertDate().getTime() != taskStatus.getAlertDate().getTime())){
+			addStatus = true;
+		}
+		if((dbTaskStatus.getDueDate() == null && taskStatus.getDueDate() != null) || 
+				(dbTaskStatus.getDueDate() != null && taskStatus.getDueDate() != null && dbTaskStatus.getDueDate().getTime() != taskStatus.getDueDate().getTime())){
+			addStatus = true;
+		}
+		if((dbTaskStatus.getStartDate() == null && taskStatus.getStartDate() != null) || 
+				(dbTaskStatus.getStartDate() != null && taskStatus.getStartDate() != null && dbTaskStatus.getStartDate().getTime() != taskStatus.getStartDate().getTime())){
+			addStatus = true;
+		}
+		if((dbTaskStatus.getEndDate() == null && taskStatus.getEndDate() != null) || 
+				(dbTaskStatus.getEndDate() != null && taskStatus.getEndDate() != null && dbTaskStatus.getEndDate().getTime() != taskStatus.getEndDate().getTime())){
+			addStatus = true;
+		}
+		if((dbTaskStatus.getDescription() == null && taskStatus.getDescription() != null) || 
+				(dbTaskStatus.getDescription() != null && taskStatus.getDescription() != null && !dbTaskStatus.getDescription().equals(taskStatus.getDescription()))){
+			addStatus = true;
+		}
+		if((dbTaskStatus.getParentTaskNo() == null && taskStatus.getParentTaskNo() != null) || 
+				(dbTaskStatus.getParentTaskNo() != null && taskStatus.getParentTaskNo() != null && !dbTaskStatus.getParentTaskNo().equals(taskStatus.getParentTaskNo()))){
+			addStatus = true;
+		}
+
+		if(dbTaskStatus.getPriority() != taskStatus.getPriority()){
+			addStatus = true;
+		}
+		if((dbTaskStatus.getStatus() == null && taskStatus.getStatus() != null) || 
+				(dbTaskStatus.getStatus() != null && taskStatus.getStatus() != null && !dbTaskStatus.getStatus().equals(taskStatus.getStatus()))){
+			addStatus = true;
+		}
+		if(dbTaskStatus.getTaskIndex() != taskStatus.getTaskIndex()){
+			addStatus = true;
+		}
+		if(addStatus){
+			task.getTaskStatusList().get(0).setTaskStatusId(null);//將key移除
+			dbTask.getTaskStatusList().add(task.getTaskStatusList().get(0));
+		}
+		//Merge Task Comment
+		List<TaskComment> newComment = new ArrayList<TaskComment>();
+		for(TaskComment comment : task.getTaskCommentList()){
+			boolean isFound = false;
+			for(TaskComment dbComment : dbTask.getTaskCommentList()){
+				if(comment.getTaskCommentUuid().equals(dbComment.getTaskCommentUuid()) || comment.getComment().equals(dbComment.getComment())){
+					isFound = true;
+				}
+			}
+			if(!isFound){
+				dbTask.getTaskCommentList().add(comment);
+			}
+		}
+		
+		return taskRepository.save(dbTask);
 	}
 }

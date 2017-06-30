@@ -1,18 +1,18 @@
 package com.raytrex.frontier.repository.bean;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-
-import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 public class Employee implements Serializable{
@@ -23,13 +23,13 @@ public class Employee implements Serializable{
 	private String empNo;
 	private String mail;
 	
-	@OneToOne(cascade=CascadeType.ALL)
+	@OneToOne(cascade=CascadeType.PERSIST)
 	@JoinColumn(name="uid")
 	private EmployeeInfo employeesInfo;
 	
-//	@OneToMany(cascade=CascadeType.ALL)
-//	@JoinColumn(name="uid")
-//	private List<EmployeeRoles> roles;
+	@OneToMany(cascade=CascadeType.PERSIST)
+	@JoinColumn(name="uid")
+	private List<EmployeeRoles> roles;
 
 	public String getUid() {
 		return uid;

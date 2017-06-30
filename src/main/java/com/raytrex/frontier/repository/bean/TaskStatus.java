@@ -1,6 +1,7 @@
 package com.raytrex.frontier.repository.bean;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -24,10 +25,10 @@ public class TaskStatus implements Serializable {
 	private Integer taskStatusId;
 	
 	@Column(name="task_no")
-	private String task_no;
+	private String taskNo;
 	
 	@Column(name="update_time")
-	private Date updateTime;
+	private Timestamp updateTime;
 	
 	private String status;
 	
@@ -62,19 +63,20 @@ public class TaskStatus implements Serializable {
 		this.taskStatusId = taskStatusId;
 	}
 
-	public String getTask_no() {
-		return task_no;
+	
+	public String getTaskNo() {
+		return taskNo;
 	}
 
-	public void setTask_no(String task_no) {
-		this.task_no = task_no;
+	public void setTaskNo(String taskNo) {
+		this.taskNo = taskNo;
 	}
 
 	public Date getUpdateTime() {
 		return updateTime;
 	}
 
-	public void setUpdateTime(Date updateTime) {
+	public void setUpdateTime(Timestamp updateTime) {
 		this.updateTime = updateTime;
 	}
 
@@ -152,15 +154,11 @@ public class TaskStatus implements Serializable {
 
 	@PrePersist
 	public void onCreate(){
-		if(this.updateTime == null){
-			this.updateTime = new Date();
-		}
+		this.updateTime = new Timestamp(System.currentTimeMillis());
 	}
 	
 	@PreUpdate
 	public void onUpdate(){
-		if(this.updateTime == null){
-			this.updateTime = new Date();
-		}
+		this.updateTime = new Timestamp(System.currentTimeMillis());
 	}
 }

@@ -2,25 +2,32 @@ package com.raytrex.frontier.repository.bean;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.SecondaryTable;
+import javax.persistence.Table;
+
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
+@Table(name="role")
 public class Role implements Serializable{
-	@Id
-	@Column(name="dep_id")
+
+	@Column(name="dep_id",insertable=false,updatable=false)
 	private String depId;
 	
+	@Id
 	@Column(name="role_id")
 	private String roleId;
 
 	@Column(name="role_name")
-	private String role_name;
+	private String roleName;
 	
 	@Column(name="role_level")
 	private String roleLevel;
@@ -45,20 +52,20 @@ public class Role implements Serializable{
 		this.roleId = roleId;
 	}
 
-	public String getRole_name() {
-		return role_name;
-	}
-
-	public void setRole_name(String role_name) {
-		this.role_name = role_name;
-	}
-
 	public String getRoleLevel() {
 		return roleLevel;
 	}
 
 	public void setRoleLevel(String roleLevel) {
 		this.roleLevel = roleLevel;
+	}
+
+	public String getRoleName() {
+		return roleName;
+	}
+
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
 	}
 
 	public Department getDepartment() {
@@ -68,4 +75,6 @@ public class Role implements Serializable{
 	public void setDepartment(Department department) {
 		this.department = department;
 	}
+
+	
 }

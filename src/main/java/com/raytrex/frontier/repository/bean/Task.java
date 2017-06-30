@@ -9,8 +9,10 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
+import javax.persistence.Transient;
 
 @Entity
 public class Task implements Serializable{
@@ -35,19 +37,28 @@ public class Task implements Serializable{
 	@Column(name="parent_task_no")
 	private String parentTaskNo;
 	
-	@OneToMany(cascade={CascadeType.ALL})
+	@OneToMany(cascade={CascadeType.MERGE})
 	@JoinColumn(name="task_no")
 	@OrderBy("join_date")
 	private List<TaskOwner> taskOwnerList = new ArrayList<TaskOwner>();
-	@OneToMany(cascade={CascadeType.ALL})
+	@OneToMany(cascade={CascadeType.MERGE})
 	@JoinColumn(name="task_no")
 	@OrderBy("comment_date DESC")
 	private List<TaskComment> taskCommentList = new ArrayList<TaskComment>();
-	@OneToMany(cascade={CascadeType.ALL})
+	@OneToMany(cascade={CascadeType.MERGE})
 	@JoinColumn(name="task_no")
 	@OrderBy("update_time DESC")
 	private List<TaskStatus> taskStatusList = new ArrayList<TaskStatus>();
 	
+	@Transient
+	private List<Task> subTaskList = new ArrayList<Task>();
+	
+	public List<Task> getSubTaskList() {
+		return subTaskList;
+	}
+	public void setSubTaskList(List<Task> subTaskList) {
+		this.subTaskList = subTaskList;
+	}
 	public String getProjectNumber() {
 		return projectNumber;
 	}
