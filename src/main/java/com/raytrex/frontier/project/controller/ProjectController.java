@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Properties;
 
@@ -17,14 +18,21 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.raytrex.frontier.project.service.ProjectService;
 import com.raytrex.frontier.repository.bean.Project;
+import com.raytrex.frontier.repository.bean.Task;
+import com.raytrex.frontier.task.service.TaskService;
+import com.raytrex.frontier.utils.GsonUtil;
 
 @RestController
 @RequestMapping("/project")
 public class ProjectController {
 	@Autowired
 	private ProjectService projectService;
+	@Autowired
+	private TaskService taskService;
 	
 	@RequestMapping("/initProjectFromRPV")
 	public String initProjecFromRPV(){
@@ -47,14 +55,29 @@ public class ProjectController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		Gson gson = new Gson();
-		List<Project> projectList= new ArrayList<Project>();
+		Gson gson = GsonUtil.getGson();
+		JsonArray results = new JsonArray();
 		if(p.containsKey("uid")){
-			projectList = projectService.getProjectByUid(p.getProperty("uid"));
+			List<Project> projectList = projectService.getProjectByUid(p.getProperty("uid"));
 			if(!projectList.isEmpty()){
 				projectList = projectService.sortProjectList(projectList);
 			}
+			for(Project project : projectList){
+				LinkedHashMap<Task, List<Task>> tasks = taskService.getTaskByProjectNumber(project.getProjectNo());
+				
+				JsonArray jsonArray = new JsonArray();
+				for(Task parentTask : tasks.keySet()){
+					JsonObject taskJson = (JsonObject) gson.toJsonTree(parentTask);
+					List<Task> subTasks = tasks.get(parentTask);
+					taskJson.add("subTaskList", gson.toJsonTree(subTasks));
+					jsonArray.add(taskJson);
+				}
+				JsonObject object = new JsonObject();
+				object.add("project", gson.toJsonTree(project));
+				object.add("task",jsonArray);
+				results.add(object);
+			}
 		}
-		return gson.toJson(projectList);
+		return gson.toJson(results);
 	}
 }
