@@ -44,7 +44,7 @@ public class ADALService {
 			ArrayList<NameValuePair> formNameValuePairList = new ArrayList<NameValuePair>();
 			formNameValuePairList.add(new BasicNameValuePair("grant_type","authorization_code"));
 			formNameValuePairList.add(new BasicNameValuePair("client_id", client_id));
-			if(redirectUri.indexOf("localhost") != -1){
+			if(redirectUri.indexOf("http") != -1){
 				formNameValuePairList.add(new BasicNameValuePair("client_secret",client_secert));
 			}
 			formNameValuePairList.add(new BasicNameValuePair("code",authCode));
@@ -86,7 +86,7 @@ public class ADALService {
 		ArrayList<NameValuePair> formNameValuePairList = new ArrayList<NameValuePair>();
 		formNameValuePairList.add(new BasicNameValuePair("grant_type","refresh_token"));
 		formNameValuePairList.add(new BasicNameValuePair("client_id", client_id));
-		if(redirectUri.indexOf("localhost") != -1){
+		if(redirectUri.indexOf("http") != -1){
 			formNameValuePairList.add(new BasicNameValuePair("client_secret",client_secert));
 		}
 		formNameValuePairList.add(new BasicNameValuePair("refresh_token",refresh_token));

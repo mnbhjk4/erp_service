@@ -58,7 +58,8 @@ public class ProjectController {
 		Gson gson = GsonUtil.getGson();
 		JsonArray results = new JsonArray();
 		if(p.containsKey("uid")){
-			List<Project> projectList = projectService.getProjectByUid(p.getProperty("uid"));
+//			List<Project> projectList = projectService.getProjectByUid(p.getProperty("uid"));
+			List<Project> projectList = projectService.getAllProject();
 			if(!projectList.isEmpty()){
 				projectList = projectService.sortProjectList(projectList);
 			}

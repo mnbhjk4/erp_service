@@ -6,6 +6,7 @@ import java.util.Base64.Encoder;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,6 +16,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.google.gson.Gson;
 import com.raytrex.frontier.repository.EmployeeRepository;
 import com.raytrex.frontier.repository.bean.Employee;
+import com.raytrex.frontier.utils.GsonUtil;
 import com.raytrex.microsoft.service.ADALService;
 
 import io.jsonwebtoken.Jwt;
@@ -31,10 +33,11 @@ public class ADALController {
 	
 	@CrossOrigin(origins = {"*","http://localhost:8100"})
 	@RequestMapping("/getToken")
-	public String getToken( String code,String scope,String redirectUri){
-		String token = adalService.getToken(code, scope, redirectUri);
+	public String getToken( @RequestBody String body){
+		Gson gson = GsonUtil.getGson();
+		Map parameterMap = gson.fromJson(body, Map.class);
+		String token = adalService.getToken(parameterMap.get("code").toString(), parameterMap.get("scope").toString(), parameterMap.get("redirectUri").toString());
 		if(!token.equals("[]")){
-			Gson gson = new Gson();
 			Map tokenMap = gson.fromJson(token, Map.class);
 			Object accessToken = tokenMap.get("access_token");
 			if(accessToken != null && !accessToken.toString().isEmpty()){

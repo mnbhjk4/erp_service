@@ -173,6 +173,10 @@ public class ProjectService {
 		return projectRespository.findProjectByProjectOwnerUid(uid);
 	}
 	
+	public List<Project> getAllProject(){
+		return projectRespository.findAll();
+	}
+	
 	public List<Project> sortProjectList(List<Project> src){
 		Project [] projectArray = new Project[src.size()];
 		src.toArray(projectArray);
