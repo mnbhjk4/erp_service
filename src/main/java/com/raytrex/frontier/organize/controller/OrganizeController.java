@@ -10,14 +10,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
+import com.raytrex.frontier.employee.service.RoleService;
 import com.raytrex.frontier.repository.DepartmentRepository;
 import com.raytrex.frontier.repository.bean.Department;
+import com.raytrex.frontier.repository.bean.FunctionMap;
+import com.raytrex.frontier.repository.bean.Role;
+import com.raytrex.frontier.utils.GsonUtil;
 
 @RestController
 @RequestMapping("/organize")
 public class OrganizeController {
 	@Autowired
 	private DepartmentRepository departmentRepository;
+	@Autowired
+	private RoleService roleService;
 	
 	@CrossOrigin(origins = {"*","http://localhost:8100"})
 	@RequestMapping("/getDepartmentsTree")
@@ -59,5 +65,22 @@ public class OrganizeController {
 		if(!childrenDepartmentList.isEmpty()){
 			departmentTree.add(childrenDepartmentList);
 		}
+	}
+	
+	@CrossOrigin(origins = {"*","http://localhost:8100"})
+	@RequestMapping("/getAllRoles")
+	public String getAllRoles(){
+		List<Role> roles = roleService.getAllRoles();
+		Gson gson = GsonUtil.getGson();
+
+		return gson.toJson(roles);
+	}
+	
+	@CrossOrigin(origins = {"*","http://localhost:8100"})
+	@RequestMapping("/getAllFunctionMap")
+	public String getAllFunctionMap(){
+		List<FunctionMap> roles = roleService.getAllFunctionMap();
+		Gson gson = GsonUtil.getGson();
+		return gson.toJson(roles);
 	}
 }

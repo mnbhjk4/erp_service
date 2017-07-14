@@ -13,6 +13,8 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
+import com.google.gson.annotations.Expose;
+
 @Entity
 @Table(name="task_status")
 public class TaskStatus implements Serializable {
@@ -22,37 +24,49 @@ public class TaskStatus implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="task_status_id")
+	@Expose
 	private Integer taskStatusId;
 	
 	@Column(name="task_no")
+	@Expose
 	private String taskNo;
 	
 	@Column(name="update_time")
+	@Expose
 	private Timestamp updateTime;
 	
+	@Expose
 	private String status;
 	
+	@Expose
 	private Integer priority = 6;
 	
 	@Column(name="start_date")
+	@Expose
 	private Date startDate;
 	
 	@Column(name="due_date")
+	@Expose
 	private Date dueDate;
 	
 	@Column(name="alert_Date")
+	@Expose
 	private Date alertDate;
 	
 	@Column(name="end_date")
+	@Expose
 	private Date endDate;
 	
 	@Column(name="task_index")
+	@Expose
 	private Integer taskIndex;
 	
 	@Column(name="parent_task_no")
+	@Expose
 	private String parentTaskNo;
 	
 	@Column(name="description")
+	@Expose
 	private String description;
 	
 	public Integer getTaskStatusId() {

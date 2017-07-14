@@ -4,23 +4,32 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+import com.google.gson.annotations.Expose;
+
 @Entity
 public class Customer {
 	@Id
 	@Column(name="customer_id")
+	@Expose
 	private String customerId;
 	
+	@Expose
 	private String name;
 	
+	@Expose
 	private String subname;
 	
+	@Expose
 	private String country;
 	
+	@Expose
 	private String region;
 	
 	@Column(name="short_name")
+	@Expose
 	private String shrotName;
 	
+	@Expose
 	private String cname;
 
 	public String getCustomerId() {

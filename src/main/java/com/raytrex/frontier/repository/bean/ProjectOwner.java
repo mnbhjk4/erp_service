@@ -9,24 +9,31 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.google.gson.annotations.Expose;
+
 @Entity
 @Table(name="project_owner")
 public class ProjectOwner {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="owner_serial")
+	@Expose
 	private Integer ownerSerial;
 	
 	@Column(name="project_no")
+	@Expose
 	private String projectNo = "";
 	
 	@Column(name="uid")
+	@Expose
 	private String uid = "";
 	
 	@Column(name="join_date")
+	@Expose
 	private Date joinDate;
 	
 	@Column(name="leave_date")
+	@Expose
 	private Date leaveDate;
 
 	public Integer getOwnerSerial() {

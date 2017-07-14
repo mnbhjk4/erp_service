@@ -11,22 +11,30 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.google.gson.annotations.Expose;
+
 @Entity
 @Table(name="task_owner")
 public class TaskOwner implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="serial_no")
+	@Expose
 	private Integer serialNo;
 	
 	@Column(name="task_no")
+	@Expose
 	private String taskNo;
+	
+	@Expose
 	private String uid;
 	
 	@Column(name="join_date")
+	@Expose
 	private Date joinDate;
 	
 	@Column(name="leave_date")
+	@Expose
 	private Date leaveDate;
 
 	public Integer getSerialNo() {

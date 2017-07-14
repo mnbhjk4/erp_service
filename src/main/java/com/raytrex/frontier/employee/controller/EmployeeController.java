@@ -6,9 +6,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
@@ -16,16 +15,23 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.raytrex.frontier.employee.service.EmployeeService;
+import com.raytrex.frontier.employee.service.RoleService;
 import com.raytrex.frontier.repository.bean.Employee;
+import com.raytrex.frontier.repository.bean.Permission;
+import com.raytrex.frontier.repository.bean.Role;
+import com.raytrex.frontier.utils.GsonUtil;
 import com.raytrex.microsoft.service.ADALService;
 
 @RestController
 @RequestMapping("/employee")
+@CrossOrigin(origins = {"*","http://localhost:8100"})
 public class EmployeeController {
 	@Autowired
 	private EmployeeService employeeService;
 	@Autowired
 	private ADALService adalService;
+	
+
 	
 	@CrossOrigin(origins = {"*","http://localhost:8100"})
 	@RequestMapping("/initEmployee")
@@ -38,7 +44,7 @@ public class EmployeeController {
 	@RequestMapping("/getCompanyUsers")
 	public String getCompanyUser(){
 		List<Employee> employees = employeeService.getCompanyUsers();
-		Gson gson = new Gson();
+		Gson gson = GsonUtil.getGson();
 		JsonArray array = new JsonArray();
 		Encoder encoder = Base64.getEncoder(); 
 		for(Employee e : employees){
@@ -57,4 +63,16 @@ public class EmployeeController {
 		}
 		return gson.toJson(array);
 	}
+	
+	@CrossOrigin(origins = {"*","http://localhost:8100"})
+	@RequestMapping("/addEmployee")
+	public String addEmployee(String employee,String permissionList){
+		Gson gson = GsonUtil.getGson();
+		Employee emp = gson.fromJson(employee, Employee.class);
+		Permission[] pList = gson.fromJson(permissionList, Permission[].class);
+		
+		return "";
+		
+	}
+
 }

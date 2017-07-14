@@ -14,43 +14,58 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Transient;
 
+import com.google.gson.annotations.Expose;
+
 @Entity
 public class Task implements Serializable{
 	@Column(name="project_number")
+	@Expose
 	private String projectNumber;
 	
 	@Id
 	@Column(name="task_no")
+	@Expose
 	private String taskNo;
 	
 	@Column(name="customer_id")
+	@Expose
 	private String customerId;
 	
+	@Expose
 	private String name;
 	
 	@Column(name="attach_uuid")
+	@Expose
 	private String attachUuid;
 	
 	@Column(name="permission_id")
+	@Expose
 	private String permissionId;
 	
 	@Column(name="parent_task_no")
+	@Expose
 	private String parentTaskNo;
 	
 	@OneToMany(cascade={CascadeType.MERGE})
 	@JoinColumn(name="task_no")
 	@OrderBy("join_date")
+	@Expose
 	private List<TaskOwner> taskOwnerList = new ArrayList<TaskOwner>();
+	
 	@OneToMany(cascade={CascadeType.MERGE})
 	@JoinColumn(name="task_no")
 	@OrderBy("comment_date DESC")
+	@Expose
 	private List<TaskComment> taskCommentList = new ArrayList<TaskComment>();
+	
 	@OneToMany(cascade={CascadeType.MERGE})
 	@JoinColumn(name="task_no")
 	@OrderBy("update_time DESC")
+	@Expose
 	private List<TaskStatus> taskStatusList = new ArrayList<TaskStatus>();
 	
 	@Transient
+	@Expose
 	private List<Task> subTaskList = new ArrayList<Task>();
 	
 	public List<Task> getSubTaskList() {

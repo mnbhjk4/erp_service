@@ -10,6 +10,7 @@ public class GsonUtil {
 		builder.registerTypeAdapter(Double.class, new DoubleTypeAdapter());
 		builder.registerTypeAdapter(Integer.class, new IntegerTypeAdapter());
 		builder.setDateFormat("yyyy-MM-dd'T'HH:mm:ssX:00");
+		builder.excludeFieldsWithoutExposeAnnotation();
 		return builder.create();
 	}
 }

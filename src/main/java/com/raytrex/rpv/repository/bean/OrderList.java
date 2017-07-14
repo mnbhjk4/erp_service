@@ -8,70 +8,96 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.google.gson.annotations.Expose;
+
 @Entity
 @Table(name="order_list")
 public class OrderList implements Serializable {
 	@Id
 	@Column(name="order_list_number")
+	@Expose
 	private Integer orderListNumber;
 	
 	@Column(name="project_number")
+	@Expose
 	private String projectNumber;
 	
+	@Expose
 	private String salesPerson;
 	
+	@Expose
 	private String engineer;
 	
+	@Expose
 	private String customer;
 	
+	@Expose
 	private String contractors;
 	
+	@Expose
 	private String location;
 	
+	@Expose
 	private String types;
 	
+	@Expose
 	private String model;
 	
+	@Expose
 	private String config;
 	
 	@Column(name="raytrex_po_date")
+	@Expose
 	private Date raytrexPoDate;
 	
 	@Column(name="move_in")
+	@Expose
 	private Date moveIn;
 	
 	@Column(name="install_hw")
+	@Expose
 	private Date installHW;
 	
 	@Column(name="install_sw")
+	@Expose
 	private Date installSW;
 	
 	@Column(name="install_measure")
+	@Expose
 	private Date installMeasure;
 	
+	@Expose
 	private Date uat;
 	
+	@Expose
 	private Date fat;
 	
 	@Column(name="sales_amount")
+	@Expose
 	private Integer salesAmount;
 	
 	@Column(name="customer_po")
+	@Expose
 	private String customerPo;
 	
 	@Column(name="order_source")
+	@Expose
 	private String orderSource;
 	
 	@Column(name="sales_remarks")
+	@Expose
 	private String salesRemarks;
 	
 	@Column(name="engineer_remarks")
+	@Expose
 	private String engineerRemarks;
 	
 	@Column(name="order_delete")
+	@Expose
 	private Integer orderDelete;
 	
 	@Column(name="update_date")
+	@Expose
 	private Date updateDate;
 	
 	public Integer getOrderListNumber() {

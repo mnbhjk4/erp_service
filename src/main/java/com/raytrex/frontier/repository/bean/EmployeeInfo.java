@@ -9,49 +9,65 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.Table;
 
+import com.google.gson.annotations.Expose;
+
 
 @Entity
 @Table(name="employee_info")
 public class EmployeeInfo implements Serializable{
 	@Id
+	@Expose
 	private String uid;
 	@Column(name="first_name")
+	@Expose
 	private String firstName;
 	
 	@Column(name="mid_name")
+	@Expose
 	private String midName;
 	
 	@Column(name="last_name")
+	@Expose
 	private String lastName;
 	
 	@Column(name="birth_date")
+	@Expose
 	private Date birthDate;
 	
 	@Column(name="preferred_language")
+	@Expose
 	private String preferredLanguage = "zh_TW";
 	
+	@Expose
 	private String gender;
 	
 	@Column(name="contact_addr_1")
+	@Expose
 	private String contactAddr1;
 	
 	@Column(name="contact_addr_2")
+	@Expose
 	private String contactAddr2;
 	
 	@Column(name="contact_phone_1")
+	@Expose
 	private String contactPhone1;
 	
 	@Column(name="contact_phone_2")
+	@Expose
 	private String contactPhone2;
 	
 	@Column(name="hire_date")
+	@Expose
 	private Date hireDate;
 	
 	@Column(name="leave_date")
+	@Expose
 	private Date leaveDate;
 
 	@Lob
 	@Column(name="image")
+	@Expose
 	private byte[] image;
 	
 	public String getUid() {

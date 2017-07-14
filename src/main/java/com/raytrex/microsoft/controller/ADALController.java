@@ -19,9 +19,6 @@ import com.raytrex.frontier.repository.bean.Employee;
 import com.raytrex.frontier.utils.GsonUtil;
 import com.raytrex.microsoft.service.ADALService;
 
-import io.jsonwebtoken.Jwt;
-import io.jsonwebtoken.Jwts;
-
 @RestController
 @RequestMapping("/adal")
 public class ADALController {

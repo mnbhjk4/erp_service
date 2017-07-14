@@ -10,17 +10,24 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
+import com.google.gson.annotations.Expose;
+
 @Entity
 @Table(name="Serial_No")
 public class SerialNo implements Serializable {
 	@Id
 	@Column(name="serial_name")
+	@Expose
 	private String serialName;
 	
+	@Expose
 	private String description;
+	
+	@Expose
 	private Integer count;
 	
 	@Column(name="update_time")
+	@Expose
 	private Date updateTime;
 	public String getSerialName() {
 		return serialName;

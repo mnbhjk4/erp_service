@@ -8,23 +8,30 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.google.gson.annotations.Expose;
+
 @Entity
 @Table(name="project_customer_po")
 public class ProjectCustomerPo implements Serializable {
 	@Id
 	@Column(name="customer_po")
+	@Expose
 	private String customerPo;
 	
 	@Column(name="customer_po_date")
+	@Expose
 	private Date customerPoDate;
 	
 	@Column(name="customer_payment_terms")
+	@Expose
 	private String customerPaymentTerms;
 	
 	@Column(name="customer_incoterm")
+	@Expose
 	private String customerIncoterm;
 	
 	@Column(name="customer_shipping_date")
+	@Expose
 	private Date customerShippingDate;
 	
 	public String getCustomerPo() {

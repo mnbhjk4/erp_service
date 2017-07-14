@@ -15,25 +15,32 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import com.google.gson.annotations.Expose;
+
 @Entity
 @Table(name="role")
 public class Role implements Serializable{
 
 	@Column(name="dep_id",insertable=false,updatable=false)
+	@Expose
 	private String depId;
 	
 	@Id
 	@Column(name="role_id")
+	@Expose
 	private String roleId;
 
 	@Column(name="role_name")
+	@Expose
 	private String roleName;
 	
 	@Column(name="role_level")
+	@Expose
 	private String roleLevel;
 	
 	@OneToOne
 	@JoinColumn(name="dep_id")
+	@Expose
 	private Department department;
 
 	public String getDepId() {

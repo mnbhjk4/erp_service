@@ -9,6 +9,8 @@ import javax.persistence.Id;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import com.google.gson.annotations.Expose;
+
 @Entity
 public class Department implements Serializable{
 	@Id
@@ -18,12 +20,17 @@ public class Department implements Serializable{
 		strategy = "org.hibernate.id.UUIDGenerator"
 	)
 	@Column(name="dep_id")
+	@Expose
 	private String depId;
 	@Column(name="dep_no")
+	@Expose
 	private String depNo;
+	@Expose
 	private String name;
+	@Expose
 	private String region;
 	@Column(name="parent_dep_id")
+	@Expose
 	private String parentDepId;
 	
 	public String getDepId() {

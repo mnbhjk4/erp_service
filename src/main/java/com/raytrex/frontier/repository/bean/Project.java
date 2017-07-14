@@ -10,28 +10,36 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
+import com.google.gson.annotations.Expose;
+
 
 @Entity
 public class Project {
 	@Id
 	@Column(name="project_no")
+	@Expose
 	private String projectNo;
 	
 	@Column(name="customer_id")
+	@Expose
 	private String customerId;
 	
 	@Column(name="attach_uuid")
+	@Expose
 	private String attachUuid;
 	
 	@Column(name="permission_id")
+	@Expose
 	private String permissionId;
 	
 	@OneToMany(cascade=CascadeType.ALL)
 	@JoinColumn(name="project_no")
+	@Expose
 	private List<ProjectOwner> ownerList = new ArrayList<ProjectOwner>();
 	
 	@OneToMany(cascade=CascadeType.ALL)
 	@JoinColumn(name="project_no")
+	@Expose
 	private List<ProjectStatus> statusList = new ArrayList<ProjectStatus>();
 	
 	

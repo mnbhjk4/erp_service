@@ -16,6 +16,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import com.google.gson.annotations.Expose;
+
 @Entity
 @Table(name="task_comment")
 public class TaskComment implements Serializable{
@@ -27,18 +29,25 @@ public class TaskComment implements Serializable{
 		strategy = "org.hibernate.id.UUIDGenerator"
 	)
 	@Column(name="task_comment_uuid")
+	@Expose
 	private String taskCommentUuid;
 
 	@Column(name="task_no",nullable=false)
+	@Expose
 	private String taskNo;
 	
+	@Expose
 	private String comment;
 
 	@Column(name="comment_date")
+	@Expose
 	private Timestamp commentDate;
+	
+	@Expose
 	private String uid;
 	
 	@Column(name="attach_uuid")
+	@Expose
 	private String attachUuid;
 
 	public String getTaskCommentUuid() {

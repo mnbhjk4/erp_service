@@ -9,36 +9,48 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
+import com.google.gson.annotations.Expose;
+
 @Entity
 @Table(name="project_status")
 public class ProjectStatus {
 	@Id
 	@Column(name="status_uuid")
+	@Expose
 	private String statusUuid;
 	
 	@Column(name="project_no")
+	@Expose
 	private String projectNo;
 	
 	@Column(name="project_name")
+	@Expose
 	private String projectName;
 	
 	@Column(name="start_date")
+	@Expose
 	private Date startDate;
 	
 	@Column(name="end_date")
+	@Expose
 	private Date endDate;
 	
 	@Column(name="update_date")
+	@Expose
 	private Date updateDate;
 	
 	@Column(name="due_date")
+	@Expose
 	private Date dueDate;
 	
 	@Column(name="alarm_date")
+	@Expose
 	private Date alarmDate;
 	
+	@Expose
 	private String description;
 
+	@Expose
 	private Integer priority = 6;
 	
 	public String getStatusUuid() {

@@ -9,36 +9,39 @@ import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.google.gson.annotations.Expose;
 
 @Entity
 @Table(name="employee_roles")
 public class EmployeeRoles implements Serializable{
-	@Column(name="uid")
-	private String uid;
 	
 	@Id
 	@Column(name="role_id")
+	@Expose
 	private String roleId;
 	
 	@Column(name="from_date")
+	@Expose
 	private Date fromDate;
 	
 	@Column(name="to_date")
+	@Expose
 	private Date toDate;
 	
-	@OneToOne(cascade=CascadeType.ALL)
+	@OneToOne(cascade=CascadeType.PERSIST)
 	@JoinColumn(name="role_id")
+	@Expose
 	private Role role;
-
-	public String getUid() {
-		return uid;
-	}
-
-	public void setUid(String uid) {
-		this.uid = uid;
-	}
+	
+	@ManyToOne
+	@JoinColumn(name = "uid")
+	@Expose(deserialize=false,serialize=false)
+	private Employee employee;
+	
 
 	public String getRoleId() {
 		return roleId;

@@ -13,23 +13,32 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+import com.google.gson.annotations.Expose;
 
 @Entity
+@Table(name="employee")
 public class Employee implements Serializable{
 	@Id
+	@Expose
 	private String uid;
 	
 	@Column(name="emp_no")
+	@Expose
 	private String empNo;
+	
+	@Expose
 	private String mail;
 	
 	@OneToOne(cascade=CascadeType.PERSIST)
 	@JoinColumn(name="uid")
+	@Expose
 	private EmployeeInfo employeesInfo;
 	
-	@OneToMany(cascade=CascadeType.PERSIST)
-	@JoinColumn(name="uid")
-	private List<EmployeeRoles> roles;
+	@OneToMany(cascade=CascadeType.PERSIST,fetch=FetchType.EAGER,mappedBy="employee")
+	@Expose
+	private List<EmployeeRoles> roleList;
 
 	public String getUid() {
 		return uid;
@@ -63,11 +72,12 @@ public class Employee implements Serializable{
 		this.employeesInfo = employeesInfo;
 	}
 
-//	public List<EmployeeRoles> getRoles() {
-//		return roles;
-//	}
-//
-//	public void setRoles(List<EmployeeRoles> roles) {
-//		this.roles = roles;
-//	}
+	public List<EmployeeRoles> getRoleList() {
+		return roleList;
+	}
+
+	public void setRoleList(List<EmployeeRoles> roleList) {
+		this.roleList = roleList;
+	}
+	
 }
