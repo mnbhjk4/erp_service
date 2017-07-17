@@ -1,6 +1,5 @@
 package com.raytrex.microsoft.service;
 
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,7 +8,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Map;
-
 
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
@@ -26,32 +24,32 @@ import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
 
-
 @Service
 public class ADALService {
 	static Logger log = Logger.getLogger(ADALService.class);
 	public static final String client_id = "7c3abeb3-bb33-435a-9ad6-d63ff39e8179";
 	public static final String tenantid = "raytrex.onmicrosoft.com";
 	public static final String client_secert = "JmAXcEV54v1kbG2jTuA4JwW";
-	public String getToken(String authCode,String scope,String redirectUri){
-		try{
+
+	public String getToken(String authCode, String scope, String redirectUri) {
+		try {
 			URI uri = new URI("https://login.microsoftonline.com/raytrex.onmicrosoft.com/oauth2/v2.0/token");
 			HttpClient client = HttpClientBuilder.create().build();
-			HttpPost post = new  HttpPost();
+			HttpPost post = new HttpPost();
 			post.addHeader("Content-Type", "application/x-www-form-urlencoded");
 			post.setURI(uri);
-			
+
 			ArrayList<NameValuePair> formNameValuePairList = new ArrayList<NameValuePair>();
-			formNameValuePairList.add(new BasicNameValuePair("grant_type","authorization_code"));
+			formNameValuePairList.add(new BasicNameValuePair("grant_type", "authorization_code"));
 			formNameValuePairList.add(new BasicNameValuePair("client_id", client_id));
-			if(redirectUri.indexOf("http") != -1){
-				formNameValuePairList.add(new BasicNameValuePair("client_secret",client_secert));
+			if (redirectUri.indexOf("http") != -1) {
+				formNameValuePairList.add(new BasicNameValuePair("client_secret", client_secert));
 			}
-			formNameValuePairList.add(new BasicNameValuePair("code",authCode));
-			formNameValuePairList.add(new BasicNameValuePair("scope",scope));
-			formNameValuePairList.add(new BasicNameValuePair("redirect_uri",redirectUri));
+			formNameValuePairList.add(new BasicNameValuePair("code", authCode));
+			formNameValuePairList.add(new BasicNameValuePair("scope", scope));
+			formNameValuePairList.add(new BasicNameValuePair("redirect_uri", redirectUri));
 			post.setEntity(new UrlEncodedFormEntity(formNameValuePairList));
-			
+
 			HttpResponse response = client.execute(post);
 			int responseCode = response.getStatusLine().getStatusCode();
 
@@ -59,8 +57,7 @@ public class ADALService {
 			log.info("Post parameters : " + formNameValuePairList);
 			log.info("Response Code : " + responseCode);
 
-			BufferedReader rd = new BufferedReader(
-		                new InputStreamReader(response.getEntity().getContent()));
+			BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
 
 			StringBuffer result = new StringBuffer();
 			String line = "";
@@ -68,74 +65,71 @@ public class ADALService {
 				result.append(line);
 			}
 			return result.toString();
-		}catch(Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		return "[]";
 	}
-	
-	public String getTokenByRefreshToken(String refresh_token,String scope,String redirectUri){
-	try{
-		URI uri = new URI("https://login.microsoftonline.com/raytrex.onmicrosoft.com/oauth2/v2.0/token");
-		HttpClient client = HttpClientBuilder.create().build();
-		HttpPost post = new  HttpPost();
-		post.addHeader("Content-Type", "application/x-www-form-urlencoded");
-		post.setURI(uri);
-		
-		ArrayList<NameValuePair> formNameValuePairList = new ArrayList<NameValuePair>();
-		formNameValuePairList.add(new BasicNameValuePair("grant_type","refresh_token"));
-		formNameValuePairList.add(new BasicNameValuePair("client_id", client_id));
-		if(redirectUri.indexOf("http") != -1){
-			formNameValuePairList.add(new BasicNameValuePair("client_secret",client_secert));
+
+	public String getTokenByRefreshToken(String refresh_token, String scope, String redirectUri) {
+		try {
+			URI uri = new URI("https://login.microsoftonline.com/raytrex.onmicrosoft.com/oauth2/v2.0/token");
+			HttpClient client = HttpClientBuilder.create().build();
+			HttpPost post = new HttpPost();
+			post.addHeader("Content-Type", "application/x-www-form-urlencoded");
+			post.setURI(uri);
+
+			ArrayList<NameValuePair> formNameValuePairList = new ArrayList<NameValuePair>();
+			formNameValuePairList.add(new BasicNameValuePair("grant_type", "refresh_token"));
+			formNameValuePairList.add(new BasicNameValuePair("client_id", client_id));
+			if (redirectUri.indexOf("http") != -1) {
+				formNameValuePairList.add(new BasicNameValuePair("client_secret", client_secert));
+			}
+			formNameValuePairList.add(new BasicNameValuePair("refresh_token", refresh_token));
+			formNameValuePairList.add(new BasicNameValuePair("scope", scope));
+			formNameValuePairList.add(new BasicNameValuePair("redirect_uri", redirectUri));
+			post.setEntity(new UrlEncodedFormEntity(formNameValuePairList));
+
+			HttpResponse response = client.execute(post);
+			int responseCode = response.getStatusLine().getStatusCode();
+
+			log.info("Sending 'POST' request to URL : " + uri.toString());
+			log.info("Post parameters : " + formNameValuePairList);
+			log.info("Response Code : " + responseCode);
+
+			BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+
+			StringBuffer result = new StringBuffer();
+			String line = "";
+			while ((line = rd.readLine()) != null) {
+				result.append(line);
+			}
+			return result.toString();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		formNameValuePairList.add(new BasicNameValuePair("refresh_token",refresh_token));
-		formNameValuePairList.add(new BasicNameValuePair("scope",scope));
-		formNameValuePairList.add(new BasicNameValuePair("redirect_uri",redirectUri));
-		post.setEntity(new UrlEncodedFormEntity(formNameValuePairList));
-		
-		HttpResponse response = client.execute(post);
-		int responseCode = response.getStatusLine().getStatusCode();
 
-		log.info("Sending 'POST' request to URL : " + uri.toString());
-		log.info("Post parameters : " + formNameValuePairList);
-		log.info("Response Code : " + responseCode);
-
-		BufferedReader rd = new BufferedReader(
-	                new InputStreamReader(response.getEntity().getContent()));
-
-		StringBuffer result = new StringBuffer();
-		String line = "";
-		while ((line = rd.readLine()) != null) {
-			result.append(line);
-		}
-		return result.toString();
-	}catch(Exception e){
-		e.printStackTrace();
+		return "[]";
 	}
-	
-	return "[]";
-	}
-	
-	public String getUserMailList(String access_token){
+
+	public String getUserMailList(String access_token) {
 		URI uri;
 		try {
 			uri = new URI("https://graph.microsoft.com/v1.0/me/messages");
 			HttpClient client = HttpClientBuilder.create().build();
-			HttpGet get = new  HttpGet();
-			get.addHeader("Authorization", "Bearer "+access_token);
+			HttpGet get = new HttpGet();
+			get.addHeader("Authorization", "Bearer " + access_token);
 			get.addHeader("Host", "graph.microsoft.com");
 			get.setURI(uri);
-			
-			
+
 			HttpResponse response = client.execute(get);
 			int responseCode = response.getStatusLine().getStatusCode();
 
 			log.info("Sending 'GET' request to URL : " + uri.toString());
 			log.info("Response Code : " + responseCode);
 
-			BufferedReader rd = new BufferedReader(
-		                new InputStreamReader(response.getEntity().getContent()));
+			BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
 
 			StringBuffer result = new StringBuffer();
 			String line = "";
@@ -157,26 +151,26 @@ public class ADALService {
 		}
 		return "";
 	}
-	
-	public byte[] getUserProfilePhoto(String access_token,String uid,String name){
+
+	public byte[] getUserProfilePhoto(String access_token, String uid, String name) {
 		byte[] image = new byte[0];
 		try {
-			URI uri = new URI("https://graph.microsoft.com/v1.0/users/"+uid+"/photo/$value");
+			URI uri = new URI("https://graph.microsoft.com/v1.0/users/" + uid + "/photo/$value");
 			HttpClient client = HttpClientBuilder.create().build();
-			HttpGet get = new  HttpGet();
-			get.addHeader("Authorization", "Bearer "+access_token);
+			HttpGet get = new HttpGet();
+			get.addHeader("Authorization", "Bearer " + access_token);
 			get.setURI(uri);
-			
+
 			HttpResponse response = client.execute(get);
 			int responseCode = response.getStatusLine().getStatusCode();
 
 			log.info("Sending 'GET' request to URL : " + uri.toString());
 			log.info("Response Code : " + responseCode);
-	
-			if(responseCode >= 200  && responseCode <= 299){
+
+			if (responseCode >= 200 && responseCode <= 299) {
 				InputStream input = response.getEntity().getContent();
-				
-				if(input != null){
+
+				if (input != null) {
 					image = IOUtils.toByteArray(input);
 				}
 			}
@@ -192,25 +186,24 @@ public class ADALService {
 		}
 		return image;
 	}
-	
-	public String listUsers(String access_token){
+
+	public String listUsers(String access_token) {
 		URI uri;
 		try {
 			uri = new URI("https://graph.microsoft.com/v1.0/users");
 			HttpClient client = HttpClientBuilder.create().build();
-			HttpGet get = new  HttpGet();
-			get.addHeader("Authorization", "Bearer "+access_token);
+			HttpGet get = new HttpGet();
+			get.addHeader("Authorization", "Bearer " + access_token);
 			get.addHeader("Content-Type", "application/json");
 			get.setURI(uri);
-			
+
 			HttpResponse response = client.execute(get);
 			int responseCode = response.getStatusLine().getStatusCode();
 
 			log.info("Sending 'GET' request to URL : " + uri.toString());
 			log.info("Response Code : " + responseCode);
 
-			BufferedReader rd = new BufferedReader(
-		                new InputStreamReader(response.getEntity().getContent()));
+			BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
 
 			StringBuffer result = new StringBuffer();
 			String line = "";
@@ -231,24 +224,58 @@ public class ADALService {
 		return "";
 	}
 
-	public String listMyContacts(String access_token){
+	public String listMyContacts(String access_token) {
 		URI uri;
 		try {
 			uri = new URI("https://graph.microsoft.com/v1.0/me/contacts");
 			HttpClient client = HttpClientBuilder.create().build();
-			HttpGet get = new  HttpGet();
-			get.addHeader("Authorization", "Bearer "+access_token);
+			HttpGet get = new HttpGet();
+			get.addHeader("Authorization", "Bearer " + access_token);
 			get.addHeader("Content-Type", "application/json");
 			get.setURI(uri);
-			
+
 			HttpResponse response = client.execute(get);
 			int responseCode = response.getStatusLine().getStatusCode();
 
 			log.info("Sending 'GET' request to URL : " + uri.toString());
 			log.info("Response Code : " + responseCode);
 
-			BufferedReader rd = new BufferedReader(
-		                new InputStreamReader(response.getEntity().getContent()));
+			BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+
+			StringBuffer result = new StringBuffer();
+			String line = "";
+			while ((line = rd.readLine()) != null) {
+				result.append(line);
+			}
+			return result.toString();
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "";
+	}
+
+	public String getUserProfile(String access_token, String uid) {
+		try {
+			URI uri = new URI("https://graph.microsoft.com/v1.0/users/" + uid);
+			HttpClient client = HttpClientBuilder.create().build();
+			HttpGet get = new HttpGet();
+			get.addHeader("Authorization", "Bearer " + access_token);
+			get.setURI(uri);
+
+			HttpResponse response = client.execute(get);
+			int responseCode = response.getStatusLine().getStatusCode();
+
+			log.info("Sending 'GET' request to URL : " + uri.toString());
+			log.info("Response Code : " + responseCode);
+
+			BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
 
 			StringBuffer result = new StringBuffer();
 			String line = "";

@@ -36,8 +36,9 @@ public class Employee implements Serializable{
 	@Expose
 	private EmployeeInfo employeesInfo;
 	
-	@OneToMany(cascade=CascadeType.PERSIST,fetch=FetchType.EAGER,mappedBy="employee")
 	@Expose
+	@OneToMany(fetch=FetchType.EAGER)
+	@JoinColumn(name="uid")
 	private List<EmployeeRoles> roleList;
 
 	public String getUid() {

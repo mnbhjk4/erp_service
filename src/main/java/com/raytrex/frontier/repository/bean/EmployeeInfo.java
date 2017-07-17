@@ -16,7 +16,7 @@ import com.google.gson.annotations.Expose;
 @Table(name="employee_info")
 public class EmployeeInfo implements Serializable{
 	@Id
-	@Expose
+	@Expose(serialize=false,deserialize=false)
 	private String uid;
 	@Column(name="first_name")
 	@Expose

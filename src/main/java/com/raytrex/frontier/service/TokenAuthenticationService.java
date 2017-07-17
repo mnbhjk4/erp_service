@@ -63,7 +63,7 @@ public class TokenAuthenticationService {
 					Employee employee = employeeRepository.findOne(oid);
 
 					for(EmployeeRoles role : employee.getRoleList()){
-						List<Permission> tmpPermissionList = permissionRepository.findByRoleId(role.getRoleId());
+						List<Permission> tmpPermissionList = permissionRepository.findByRoleId(role.getRole().getRoleId());
 						if(tmpPermissionList != null && !tmpPermissionList.isEmpty()){
 							permissionList.addAll(tmpPermissionList);
 						}

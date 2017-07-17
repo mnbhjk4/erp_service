@@ -3,13 +3,17 @@ package com.raytrex.frontier.repository.bean;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.CascadeType;
+import javax.annotation.Generated;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.ForeignKey;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -18,38 +22,38 @@ import com.google.gson.annotations.Expose;
 @Entity
 @Table(name="employee_roles")
 public class EmployeeRoles implements Serializable{
-	
 	@Id
-	@Column(name="role_id")
-	@Expose
-	private String roleId;
+	@Column(name="e_index")
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private String eIndex;
 	
-	@Column(name="from_date")
+	@Column(name="uid")
 	@Expose
+	private String uid;
+	
+	@Expose
+	@Column(name="from_date")
 	private Date fromDate;
 	
-	@Column(name="to_date")
 	@Expose
+	@Column(name="to_date")
 	private Date toDate;
 	
-	@OneToOne(cascade=CascadeType.PERSIST)
-	@JoinColumn(name="role_id")
+	
 	@Expose
+	@OneToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="role_id")
 	private Role role;
 	
-	@ManyToOne
-	@JoinColumn(name = "uid")
-	@Expose(deserialize=false,serialize=false)
-	private Employee employee;
-	
 
-	public String getRoleId() {
-		return roleId;
-	}
 
-	public void setRoleId(String roleId) {
-		this.roleId = roleId;
-	}
+//	public String getRoleId() {
+//		return roleId;
+//	}
+//
+//	public void setRoleId(String roleId) {
+//		this.roleId = roleId;
+//	}
 
 	public Date getFromDate() {
 		return fromDate;
@@ -74,4 +78,21 @@ public class EmployeeRoles implements Serializable{
 	public void setRole(Role role) {
 		this.role = role;
 	}
+
+	public String getUid() {
+		return uid;
+	}
+
+	public void setUid(String uid) {
+		this.uid = uid;
+	}
+
+	public String geteIndex() {
+		return eIndex;
+	}
+
+	public void seteIndex(String eIndex) {
+		this.eIndex = eIndex;
+	}
+	
 }

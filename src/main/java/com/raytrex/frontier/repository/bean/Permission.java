@@ -4,33 +4,55 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import org.springframework.security.core.GrantedAuthority;
+
+import com.google.gson.annotations.Expose;
 
 @Entity
 public class Permission implements Serializable, GrantedAuthority {
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="permission_serial")
+	@Expose
 	private Integer permissionSerial;
 	
 	@Column(name="permission_id")
+	@Expose
 	private String permissionId;
 	@Column(name="role_id")
+	@Expose
 	private String roleId;
+	@Expose
 	private String uid;
 	
 	@Column(name="function_name")
-	private String fucntionName;
+	@Expose
+	private String functionName;
 	
-	private Integer create;
-	private Integer update;
-	private Integer read;
-	private Integer delete;
+	@Column(name="create_p")
+	@Expose
+	private Integer create = 999;
 	
+	@Column(name="update_p")
+	@Expose
+	private Integer update = 999;
+	
+	@Column(name="read_p")
+	@Expose
+	private Integer read = 999;
+	
+	@Column(name="delete_p")
+	@Expose
+	private Integer delete = 999;
+	
+
 	public String getPermissionId() {
 		return permissionId;
 	}
@@ -80,12 +102,14 @@ public class Permission implements Serializable, GrantedAuthority {
 	public void setUid(String uid) {
 		this.uid = uid;
 	}
-	public String getFucntionName() {
-		return fucntionName;
+	
+	public String getFunctionName() {
+		return functionName;
 	}
-	public void setFucntionName(String fucntionName) {
-		this.fucntionName = fucntionName;
+	public void setFunctionName(String functionName) {
+		this.functionName = functionName;
 	}
+	
 	@Override
 	public String getAuthority() {
 		String curd = "";
@@ -101,6 +125,6 @@ public class Permission implements Serializable, GrantedAuthority {
 		if(delete != null && delete >=  0 && delete <= 9){
 			curd+=delete.toString();
 		}
-		return curd+"_"+this.getFucntionName();
+		return curd+"_"+this.getFunctionName();
 	}
 }

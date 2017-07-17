@@ -1,13 +1,20 @@
 package com.raytrex.frontier.repository.bean;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.SecondaryTable;
@@ -38,11 +45,21 @@ public class Role implements Serializable{
 	@Expose
 	private String roleLevel;
 	
-	@OneToOne
+	@OneToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="dep_id")
 	@Expose
 	private Department department;
+	
+	
+	@OneToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="role_id")
+	private EmployeeRoles employeeRoles;
+	
+	@OneToMany(fetch=FetchType.EAGER)
+	@JoinColumn(name="role_id")
+	private List<Permission> permissionList = new ArrayList<Permission>();
 
+	
 	public String getDepId() {
 		return depId;
 	}
@@ -83,5 +100,21 @@ public class Role implements Serializable{
 		this.department = department;
 	}
 
+	public EmployeeRoles getEmployeeRoles() {
+		return employeeRoles;
+	}
+
+	public void setEmployeeRoles(EmployeeRoles employeeRoles) {
+		this.employeeRoles = employeeRoles;
+	}
+
+	public List<Permission> getPermissionList() {
+		return permissionList;
+	}
+
+	public void setPermissionList(List<Permission> permissionList) {
+		this.permissionList = permissionList;
+	}
+	
 	
 }

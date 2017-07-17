@@ -1,6 +1,7 @@
 package com.raytrex.frontier.employee.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -9,11 +10,15 @@ import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
 import com.raytrex.frontier.repository.DepartmentRepository;
+import com.raytrex.frontier.repository.EmployeeInfoRepository;
 import com.raytrex.frontier.repository.EmployeeRepository;
+import com.raytrex.frontier.repository.EmployeeRolesRepository;
 import com.raytrex.frontier.repository.PermissionRepository;
 import com.raytrex.frontier.repository.RoleRepository;
 import com.raytrex.frontier.repository.bean.Employee;
 import com.raytrex.frontier.repository.bean.EmployeeInfo;
+import com.raytrex.frontier.repository.bean.EmployeeRoles;
+import com.raytrex.frontier.repository.bean.Permission;
 import com.raytrex.microsoft.service.ADALService;
 
 @Service
@@ -23,6 +28,10 @@ public class EmployeeService {
 	
 	@Autowired
 	private EmployeeRepository employeeRepository;
+	@Autowired
+	private EmployeeInfoRepository employessInfoRepository;
+	@Autowired
+	private EmployeeRolesRepository employeeRolesRepository;
 	@Autowired
 	private DepartmentRepository departmentRepository;
 	@Autowired
@@ -81,5 +90,15 @@ public class EmployeeService {
 	
 	public Employee saveEmployee(Employee employee){
 		return employeeRepository.save(employee);
+	}
+	public EmployeeInfo saveEmployeeInfo(EmployeeInfo employeeInfo){
+		return employessInfoRepository.save(employeeInfo);
+	}
+	public EmployeeRoles saveEmployeeRoles(EmployeeRoles employeeRoles){
+		return employeeRolesRepository.save(employeeRoles);
+	}
+
+	public Permission savePermission(Permission permission){
+		return permissionRepository.save(permission);
 	}
 }
