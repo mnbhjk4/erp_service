@@ -1,5 +1,7 @@
 package com.raytrex.frontier.employee.service;
 
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,10 +17,12 @@ import com.raytrex.frontier.repository.EmployeeRepository;
 import com.raytrex.frontier.repository.EmployeeRolesRepository;
 import com.raytrex.frontier.repository.PermissionRepository;
 import com.raytrex.frontier.repository.RoleRepository;
+import com.raytrex.frontier.repository.SerialNoRepository;
 import com.raytrex.frontier.repository.bean.Employee;
 import com.raytrex.frontier.repository.bean.EmployeeInfo;
 import com.raytrex.frontier.repository.bean.EmployeeRoles;
 import com.raytrex.frontier.repository.bean.Permission;
+import com.raytrex.frontier.repository.bean.SerialNo;
 import com.raytrex.microsoft.service.ADALService;
 
 @Service
@@ -38,6 +42,8 @@ public class EmployeeService {
 	private RoleRepository roleRepository;
 	@Autowired
 	private PermissionRepository permissionRepository;
+	@Autowired
+	private SerialNoRepository serialRepository;
 	
 	/**
 	 * 初始化Azure上所有的帳號,到Frontier的身上
@@ -100,5 +106,42 @@ public class EmployeeService {
 
 	public Permission savePermission(Permission permission){
 		return permissionRepository.save(permission);
+	}
+	
+	public Employee getEmployee(String uid){
+		return employeeRepository.findOne(uid);
+	}
+	
+	public List<Permission> getPermission(String uid){
+		return permissionRepository.findByUid(uid);
+	}
+	
+	public String getNewEmployeeNo(){
+		SimpleDateFormat sdf = new SimpleDateFormat("YYYY");
+		DecimalFormat df = new DecimalFormat("000");
+		SerialNo serialNo = serialRepository.findOne("RTX");
+		if(serialNo == null){
+			SerialNo sn = new SerialNo();
+			sn.setCount(0);
+			sn.setSerialName("RTX");
+			sn.setDescription("員工編號");
+			serialNo = serialRepository.save(sn);
+		}
+		//先來找看看該EMP NO是否被使用,沒有就不用加1
+		Integer count = serialNo.getCount();
+		String no = "";
+		
+		while(true){
+			no = "RTX"+sdf.format(new Date())+ df.format(count);
+			Employee employee = employeeRepository.findOneByEmpNo(no);
+			if(employee != null){//
+				count++;
+			}else{
+				serialNo.setCount(count);
+				serialNo = serialRepository.save(serialNo);
+				break;
+			}
+		}
+		return no;
 	}
 }

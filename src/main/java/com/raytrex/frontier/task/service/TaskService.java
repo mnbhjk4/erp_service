@@ -4,18 +4,14 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
+
 import com.raytrex.frontier.repository.EmployeeRepository;
 import com.raytrex.frontier.repository.ProjectRepository;
 import com.raytrex.frontier.repository.SerialNoRepository;

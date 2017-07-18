@@ -20,6 +20,7 @@ import com.raytrex.frontier.employee.service.EmployeeService;
 import com.raytrex.frontier.repository.bean.Employee;
 import com.raytrex.frontier.repository.bean.EmployeeInfo;
 import com.raytrex.frontier.repository.bean.EmployeeRoles;
+import com.raytrex.frontier.repository.bean.FunctionMap;
 import com.raytrex.frontier.repository.bean.Permission;
 import com.raytrex.frontier.utils.GsonUtil;
 import com.raytrex.microsoft.service.ADALService;
@@ -45,11 +46,6 @@ public class EmployeeController {
 	public String getCompanyUser() {
 		List<Employee> employees = employeeService.getCompanyUsers();
 		Gson gson = GsonUtil.getGson();
-//		JsonArray array = new JsonArray();
-//		for (Employee e : employees) {
-//			JsonObject obj = (JsonObject) gson.toJsonTree(e);
-//			array.add(obj);
-//		}
 		return gson.toJson(employees);
 	}
 
@@ -114,7 +110,27 @@ public class EmployeeController {
 			employeeService.savePermission(p);
 		}
 		return gson.toJson(employeeService.getCompanyUsers());
-
 	}
-
+	
+	@CrossOrigin(origins = { "*", "http://localhost:8100" })
+	@RequestMapping("/getEmployee")
+	public String getEmployee(String uid) {
+		Gson gson = GsonUtil.getGson();
+		Employee employee = employeeService.getEmployee(uid);
+		JsonObject jo = new JsonObject();
+		if(employee != null){
+			List<Permission> permissionList = employeeService.getPermission(uid);
+			jo.add("permission", gson.toJsonTree(permissionList));
+		}
+		jo.add("employee", gson.toJsonTree(employee));
+		return gson.toJson(employee);
+	}
+	
+	@CrossOrigin(origins = {"*","http://localhost:8100"})
+	@RequestMapping("/getRTXNo")
+	public String getRTXNo(){
+		String rtxno = employeeService.getNewEmployeeNo();
+		Gson gson = GsonUtil.getGson();
+		return gson.toJson(rtxno);
+	}
 }

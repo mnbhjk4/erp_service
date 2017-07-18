@@ -8,7 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.Claim;
@@ -95,6 +98,14 @@ public class ADALController {
 		Encoder encoder = Base64.getEncoder();
 		byte[] array = adalService.getUserProfilePhoto(access_token,uid,name);
 		return encoder.encodeToString(array); 
+	}
+	
+	@CrossOrigin(origins = {"*","http://localhost:8100"})
+	@RequestMapping(value="/uploadOwnPhoto",method=RequestMethod.POST)
+	public String uploadOwnPhoto(@RequestParam String access_token,@RequestParam String uid,@RequestParam("file") MultipartFile file){
+		Encoder encoder = Base64.getEncoder();
+//		byte[] array = adalService.getUserProfilePhoto(access_token,uid,name);
+		return ""; 
 	}
 	
 	

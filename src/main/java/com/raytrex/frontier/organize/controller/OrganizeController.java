@@ -24,7 +24,7 @@ public class OrganizeController {
 	private DepartmentRepository departmentRepository;
 	@Autowired
 	private RoleService roleService;
-	
+
 	@CrossOrigin(origins = {"*","http://localhost:8100"})
 	@RequestMapping("/getDepartmentsTree")
 	public String getDepartmentsTree(){
@@ -72,7 +72,7 @@ public class OrganizeController {
 	public String getAllRoles(){
 		List<Role> roles = roleService.getAllRoles();
 		Gson gson = GsonUtil.getGson();
-
+		
 		return gson.toJson(roles);
 	}
 	

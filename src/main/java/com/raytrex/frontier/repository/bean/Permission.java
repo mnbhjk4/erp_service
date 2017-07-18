@@ -38,19 +38,19 @@ public class Permission implements Serializable, GrantedAuthority {
 	
 	@Column(name="create_p")
 	@Expose
-	private Integer create = 999;
+	private String create = "F";
 	
 	@Column(name="update_p")
 	@Expose
-	private Integer update = 999;
+	private String update = "F";
 	
 	@Column(name="read_p")
 	@Expose
-	private Integer read = 999;
+	private String read = "F";
 	
 	@Column(name="delete_p")
 	@Expose
-	private Integer delete = 999;
+	private String delete = "F";
 	
 
 	public String getPermissionId() {
@@ -65,28 +65,28 @@ public class Permission implements Serializable, GrantedAuthority {
 	public void setRoleId(String roleId) {
 		this.roleId = roleId;
 	}
-	public Integer getCreate() {
+	public String getCreate() {
 		return create;
 	}
-	public void setCreate(Integer create) {
+	public void setCreate(String create) {
 		this.create = create;
 	}
-	public Integer getUpdate() {
+	public String getUpdate() {
 		return update;
 	}
-	public void setUpdate(Integer update) {
+	public void setUpdate(String update) {
 		this.update = update;
 	}
-	public Integer getRead() {
+	public String getRead() {
 		return read;
 	}
-	public void setRead(Integer read) {
+	public void setRead(String read) {
 		this.read = read;
 	}
-	public Integer getDelete() {
+	public String getDelete() {
 		return delete;
 	}
-	public void setDelete(Integer delete) {
+	public void setDelete(String delete) {
 		this.delete = delete;
 	}
 	
@@ -113,16 +113,16 @@ public class Permission implements Serializable, GrantedAuthority {
 	@Override
 	public String getAuthority() {
 		String curd = "";
-		if(create != null && create >=  0 && create <= 9){
+		if(create != null && Integer.parseInt(create,16) >=  0 && Integer.parseInt(create,16) <= 9){
 			curd+=create.toString();
 		}
-		if(update != null && update >=  0 && update <= 9){
+		if(update != null && Integer.parseInt(update,16) >=  0 &&  Integer.parseInt(update,16) <= 9){
 			curd+=update.toString();
 		}
-		if(read != null && read >=  0 && read <= 9){
+		if(read != null && Integer.parseInt(read,16) >=  0 && Integer.parseInt(read,16) <= 9){
 			curd+=read.toString();
 		}
-		if(delete != null && delete >=  0 && delete <= 9){
+		if(delete != null && Integer.parseInt(delete,16) >=  0 && Integer.parseInt(delete,16) <= 9){
 			curd+=delete.toString();
 		}
 		return curd+"_"+this.getFunctionName();

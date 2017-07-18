@@ -4,6 +4,7 @@ import java.util.Properties;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.servlet.ServletContext;
 import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
@@ -22,6 +23,7 @@ import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -88,5 +90,10 @@ public class FrontierRepositoryConfig {
 		JpaTransactionManager tm = new JpaTransactionManager();
 		tm.setEntityManagerFactory(entityManagerFactory());
 		return tm;
+	}
+	
+	@Bean
+	public CommonsMultipartResolver getCommonsMutipartResolver(ServletContext context){
+		return new CommonsMultipartResolver(context);
 	}
 }

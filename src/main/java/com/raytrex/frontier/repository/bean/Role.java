@@ -57,6 +57,7 @@ public class Role implements Serializable{
 	
 	@OneToMany(fetch=FetchType.EAGER)
 	@JoinColumn(name="role_id")
+	@Expose
 	private List<Permission> permissionList = new ArrayList<Permission>();
 
 	

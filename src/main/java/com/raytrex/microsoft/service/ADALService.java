@@ -17,6 +17,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.log4j.Logger;
@@ -283,6 +284,44 @@ public class ADALService {
 				result.append(line);
 			}
 			return result.toString();
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "";
+	}
+	
+	public String updateOwnPhoto(String access_token,byte[] image){
+		try {
+			URI uri = new URI("https://graph.microsoft.com/v1.0/me/photo/$value");
+			HttpClient client = HttpClientBuilder.create().build();
+			HttpPut put = new HttpPut();
+			put.addHeader("Authorization", "Bearer " + access_token);
+			put.addHeader("Content-Type", "image/jpeg");
+			put.setURI(uri);
+
+			HttpResponse response = client.execute(put);
+			int responseCode = response.getStatusLine().getStatusCode();
+
+			log.info("Sending 'GET' request to URL : " + uri.toString());
+			log.info("Response Code : " + responseCode);
+
+			if (responseCode >= 200 && responseCode <= 299) {
+				BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+
+				StringBuffer result = new StringBuffer();
+				String line = "";
+				while ((line = rd.readLine()) != null) {
+					result.append(line);
+				}
+				return result.toString();
+			}
 		} catch (URISyntaxException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
