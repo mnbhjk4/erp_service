@@ -1,5 +1,6 @@
 package com.raytrex.frontier.task.service;
 
+import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -51,9 +52,9 @@ public class TaskService {
 				task.setCustomerId(project.getCustomerId());
 				//Task Status
 				TaskStatus status = new TaskStatus();
-				status.setStartDate(order.getRaytrexPoDate());
-				status.setDueDate(order.getRaytrexPoDate());
-				status.setEndDate(order.getRaytrexPoDate());
+				status.setStartDate(new Timestamp(order.getRaytrexPoDate().getTime()));
+				status.setDueDate(new Timestamp(order.getRaytrexPoDate().getTime()));
+				status.setEndDate(new Timestamp(order.getRaytrexPoDate().getTime()));
 				status.setPriority(6);
 				status.setTaskNo(task.getTaskNo());
 				status.setStatus(TaskStatus.Done);
@@ -78,9 +79,9 @@ public class TaskService {
 				task.setName("Move in");
 				//Task Status
 				TaskStatus status = new TaskStatus();
-				status.setStartDate(order.getMoveIn());
+				status.setStartDate(new Timestamp(order.getMoveIn().getTime()));
 				if(order.getMoveIn().getTime() > System.currentTimeMillis()){//還沒Move in
-					status.setAlertDate(order.getMoveIn());
+					status.setAlertDate(new Timestamp(order.getMoveIn().getTime()));
 					status.setPriority(1);
 					if(started){
 						status.setStatus(TaskStatus.NotAction);
@@ -89,11 +90,11 @@ public class TaskService {
 						started = true;
 					}
 				}else{ //已經Move in
-					status.setEndDate(order.getInstallHW());
+					status.setEndDate(new Timestamp(order.getInstallHW().getTime()));
 					status.setPriority(6);
 					status.setStatus(TaskStatus.Done);
 				}
-				status.setDueDate(order.getInstallHW());
+				status.setDueDate(new Timestamp(order.getInstallHW().getTime()));
 
 				status.setTaskNo(task.getTaskNo());
 				task.getTaskStatusList().add(status);
@@ -108,9 +109,9 @@ public class TaskService {
 				task.setName("Install Hardware");
 				//Task Status
 				TaskStatus status = new TaskStatus();
-				status.setStartDate(order.getInstallHW());
+				status.setStartDate(new Timestamp(order.getInstallHW().getTime()));
 				if(order.getInstallHW().getTime() > System.currentTimeMillis()){//還沒Install HW
-					status.setAlertDate(order.getInstallSW());
+					status.setAlertDate(new Timestamp(order.getInstallSW().getTime()));
 					status.setPriority(2);
 					if(started){
 						status.setStatus(TaskStatus.NotAction);
@@ -119,11 +120,11 @@ public class TaskService {
 						started = true;
 					}
 				}else{ //已經Install HW
-					status.setEndDate(order.getInstallSW());
+					status.setEndDate(new Timestamp(order.getInstallSW().getTime()));
 					status.setPriority(6);
 					status.setStatus(TaskStatus.Done);
 				}
-				status.setDueDate(order.getInstallSW());
+				status.setDueDate(new Timestamp(order.getInstallSW().getTime()));
 				
 				status.setTaskNo(task.getTaskNo());
 				task.getTaskStatusList().add(status);
@@ -139,9 +140,9 @@ public class TaskService {
 				task.setName("Install Software");
 				//Task Status
 				TaskStatus status = new TaskStatus();
-				status.setStartDate(order.getInstallSW());
+				status.setStartDate(new Timestamp(order.getInstallSW().getTime()));
 				if(order.getInstallSW().getTime() > System.currentTimeMillis()){//還沒Move in
-					status.setAlertDate(order.getInstallMeasure());
+					status.setAlertDate(new Timestamp(order.getInstallMeasure().getTime()));
 					status.setPriority(3);
 					if(started){
 						status.setStatus(TaskStatus.NotAction);
@@ -150,11 +151,11 @@ public class TaskService {
 						started = true;
 					}
 				}else{ //已經Move in
-					status.setEndDate(order.getInstallMeasure());
+					status.setEndDate(new Timestamp(order.getInstallMeasure().getTime()));
 					status.setPriority(6);
 					status.setStatus(TaskStatus.Done);
 				}
-				status.setDueDate(order.getInstallMeasure());
+				status.setDueDate(new Timestamp(order.getInstallMeasure().getTime()));
 				status.setTaskNo(task.getTaskNo());
 				task.getTaskStatusList().add(status);
 				
@@ -169,9 +170,9 @@ public class TaskService {
 				task.setName("Install Measure");
 				//Task Status
 				TaskStatus status = new TaskStatus();
-				status.setStartDate(order.getInstallMeasure());
+				status.setStartDate(new Timestamp(order.getInstallMeasure().getTime()));
 				if(order.getInstallMeasure().getTime() > System.currentTimeMillis()){//還沒Install measure
-					status.setAlertDate(order.getUat());
+					status.setAlertDate(new Timestamp(order.getUat().getTime()));
 					status.setPriority(3);
 					if(started){
 						status.setStatus(TaskStatus.NotAction);
@@ -180,11 +181,11 @@ public class TaskService {
 						started = true;
 					}
 				}else{ //已經還沒Install measure
-					status.setEndDate(order.getUat());
+					status.setEndDate(new Timestamp(order.getUat().getTime()));
 					status.setPriority(6);
 					status.setStatus(TaskStatus.Done);
 				}
-				status.setDueDate(order.getUat());
+				status.setDueDate(new Timestamp(order.getUat().getTime()));
 				
 				status.setTaskNo(task.getTaskNo());
 				task.getTaskStatusList().add(status);
@@ -200,9 +201,9 @@ public class TaskService {
 				task.setName("UAT");
 				//Task Status
 				TaskStatus status = new TaskStatus();
-				status.setStartDate(order.getUat());
+				status.setStartDate(new Timestamp(order.getUat().getTime()));
 				if(order.getUat().getTime() > System.currentTimeMillis()){//還沒UAT
-					status.setAlertDate(order.getFat());
+					status.setAlertDate(new Timestamp(order.getFat().getTime()));
 					status.setPriority(4);
 					if(started){
 						status.setStatus(TaskStatus.NotAction);
@@ -211,11 +212,11 @@ public class TaskService {
 						started = true;
 					}
 				}else{ //已經還沒UAT
-					status.setEndDate(order.getFat());
+					status.setEndDate(new Timestamp(order.getFat().getTime()));
 					status.setPriority(6);
 					status.setStatus(TaskStatus.Done);
 				}
-				status.setDueDate(order.getFat());
+				status.setDueDate(new Timestamp(order.getFat().getTime()));
 				status.setTaskNo(task.getTaskNo());
 				task.getTaskStatusList().add(status);
 				
@@ -230,9 +231,9 @@ public class TaskService {
 				task.setName("FAT");
 				//Task Status
 				TaskStatus status = new TaskStatus();
-				status.setStartDate(order.getFat());
+				status.setStartDate(new Timestamp(order.getFat().getTime()));
 				if(order.getFat().getTime() > System.currentTimeMillis()){//還沒FAT
-					status.setAlertDate(order.getFat());
+					status.setAlertDate(new Timestamp(order.getFat().getTime()));
 					status.setPriority(4);
 					if(started){
 						status.setStatus(TaskStatus.NotAction);
@@ -241,11 +242,11 @@ public class TaskService {
 						started = true;
 					}
 				}else{ //已經還沒FAT
-					status.setEndDate(order.getFat());
+					status.setEndDate(new Timestamp(order.getFat().getTime()));
 					status.setPriority(6);
 					status.setStatus(TaskStatus.Done);
 				}
-				status.setDueDate(order.getFat());
+				status.setDueDate(new Timestamp(order.getFat().getTime()));
 				status.setTaskNo(task.getTaskNo());
 				task.getTaskStatusList().add(status);
 				

@@ -24,5 +24,9 @@ public class RoleService {
 	public List<FunctionMap> getAllFunctionMap(){
 		return functionMapRepository.findAll();
 	}
+	
+	public List<Role> getRoleByDepId(String depId){
+		return roleRepository.findAllByDepId(depId);
+	}
 
 }

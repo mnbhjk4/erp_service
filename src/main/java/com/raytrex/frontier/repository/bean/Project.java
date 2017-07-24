@@ -1,14 +1,12 @@
 package com.raytrex.frontier.repository.bean;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 
 import com.google.gson.annotations.Expose;
 
@@ -32,15 +30,14 @@ public class Project {
 	@Expose
 	private String permissionId;
 	
-	@OneToMany(cascade=CascadeType.ALL)
-	@JoinColumn(name="project_no")
 	@Expose
-	private List<ProjectOwner> ownerList = new ArrayList<ProjectOwner>();
+	@OneToMany(mappedBy="project")
+	private List<ProjectOwner> ownerList;
 	
-	@OneToMany(cascade=CascadeType.ALL)
-	@JoinColumn(name="project_no")
 	@Expose
-	private List<ProjectStatus> statusList = new ArrayList<ProjectStatus>();
+	@OneToMany(mappedBy="project")
+	@OrderBy("update_date DESC")
+	private List<ProjectStatus> statusList;
 	
 	
 

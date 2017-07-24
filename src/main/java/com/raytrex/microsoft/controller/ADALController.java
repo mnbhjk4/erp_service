@@ -1,14 +1,15 @@
 package com.raytrex.microsoft.controller;
 
+import java.io.IOException;
 import java.util.Base64;
 import java.util.Map;
 import java.util.Base64.Encoder;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -101,10 +102,24 @@ public class ADALController {
 	}
 	
 	@CrossOrigin(origins = {"*","http://localhost:8100"})
-	@RequestMapping(value="/uploadOwnPhoto",method=RequestMethod.POST)
-	public String uploadOwnPhoto(@RequestParam String access_token,@RequestParam String uid,@RequestParam("file") MultipartFile file){
-		Encoder encoder = Base64.getEncoder();
-//		byte[] array = adalService.getUserProfilePhoto(access_token,uid,name);
+	@PostMapping(value="/uploadOwnPhoto")
+	public String uploadOwnPhoto(@RequestParam("access_token") String access_token,@RequestParam("uid") String uid,@RequestParam("image") MultipartFile image){
+		if(!image.isEmpty()){
+			byte[] bytes  = null;
+			try {
+				bytes = image.getBytes();
+				this.adalService.updateOwnPhoto(access_token, bytes);
+				
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			Employee employee = employeeRepository.findOne(uid);
+			if(employee != null && bytes != null){
+				employee.getEmployeesInfo().setImage(bytes);
+				employeeRepository.save(employee);
+			}
+		}
 		return ""; 
 	}
 	

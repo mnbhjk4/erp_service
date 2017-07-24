@@ -16,6 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.google.gson.annotations.Expose;
 
@@ -27,7 +28,7 @@ public class EmployeeRoles implements Serializable{
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private String eIndex;
 	
-	@Column(name="uid")
+	@Transient
 	@Expose
 	private String uid;
 	
@@ -45,15 +46,10 @@ public class EmployeeRoles implements Serializable{
 	@JoinColumn(name="role_id")
 	private Role role;
 	
-
-
-//	public String getRoleId() {
-//		return roleId;
-//	}
-//
-//	public void setRoleId(String roleId) {
-//		this.roleId = roleId;
-//	}
+	@ManyToOne
+	@JoinColumn(name="uid")
+	private Employee employee;
+	
 
 	public Date getFromDate() {
 		return fromDate;
@@ -84,7 +80,9 @@ public class EmployeeRoles implements Serializable{
 	}
 
 	public void setUid(String uid) {
-		this.uid = uid;
+		if(this.employee != null){
+			this.uid = this.employee.getUid();
+		}
 	}
 
 	public String geteIndex() {
@@ -93,6 +91,14 @@ public class EmployeeRoles implements Serializable{
 
 	public void seteIndex(String eIndex) {
 		this.eIndex = eIndex;
+	}
+
+	public Employee getEmployee() {
+		return employee;
+	}
+
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
 	}
 	
 }

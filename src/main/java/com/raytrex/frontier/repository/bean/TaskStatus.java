@@ -43,19 +43,19 @@ public class TaskStatus implements Serializable {
 	
 	@Column(name="start_date")
 	@Expose
-	private Date startDate;
+	private Timestamp startDate;
 	
 	@Column(name="due_date")
 	@Expose
-	private Date dueDate;
+	private Timestamp dueDate;
 	
 	@Column(name="alert_Date")
 	@Expose
-	private Date alertDate;
+	private Timestamp alertDate;
 	
 	@Column(name="end_date")
 	@Expose
-	private Date endDate;
+	private Timestamp endDate;
 	
 	@Column(name="task_index")
 	@Expose
@@ -114,31 +114,31 @@ public class TaskStatus implements Serializable {
 		return startDate;
 	}
 
-	public void setStartDate(Date startDate) {
+	public void setStartDate(Timestamp startDate) {
 		this.startDate = startDate;
 	}
 
-	public Date getDueDate() {
+	public Timestamp getDueDate() {
 		return dueDate;
 	}
 
-	public void setDueDate(Date dueDate) {
+	public void setDueDate(Timestamp dueDate) {
 		this.dueDate = dueDate;
 	}
 
-	public Date getAlertDate() {
+	public Timestamp getAlertDate() {
 		return alertDate;
 	}
 
-	public void setAlertDate(Date alertDate) {
+	public void setAlertDate(Timestamp alertDate) {
 		this.alertDate = alertDate;
 	}
 
-	public Date getEndDate() {
+	public Timestamp getEndDate() {
 		return endDate;
 	}
 
-	public void setEndDate(Date endDate) {
+	public void setEndDate(Timestamp endDate) {
 		this.endDate = endDate;
 	}
 

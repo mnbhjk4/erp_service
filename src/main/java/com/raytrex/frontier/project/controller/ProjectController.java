@@ -2,8 +2,10 @@ package com.raytrex.frontier.project.controller;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.lang.reflect.Type;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Properties;
@@ -15,14 +17,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import com.raytrex.frontier.project.service.ProjectService;
 import com.raytrex.frontier.repository.bean.Project;
+import com.raytrex.frontier.repository.bean.ProjectOwner;
+import com.raytrex.frontier.repository.bean.ProjectStatus;
 import com.raytrex.frontier.repository.bean.Task;
+import com.raytrex.frontier.repository.bean.TaskStatus;
 import com.raytrex.frontier.task.service.TaskService;
 import com.raytrex.frontier.utils.GsonUtil;
 
@@ -64,6 +71,21 @@ public class ProjectController {
 				projectList = projectService.sortProjectList(projectList);
 			}
 			for(Project project : projectList){
+				//將Project的Owner移除有Leave date的人員
+				Iterator<ProjectOwner> pIt = project.getOwnerList().iterator();
+				while(pIt.hasNext()){
+					ProjectOwner po = pIt.next();
+					if(po.getLeaveDate() != null){
+						pIt.remove();
+					}
+				}
+				
+				//將其他的Project status留第一筆
+				if(project.getStatusList().size()>0){
+					List<ProjectStatus> newProjectStatus = new ArrayList<ProjectStatus>();
+					newProjectStatus.add(project.getStatusList().get(0));
+					project.setStatusList(newProjectStatus);
+				}
 				LinkedHashMap<Task, List<Task>> tasks = taskService.getTaskByProjectNumber(project.getProjectNo());
 				
 				JsonArray jsonArray = new JsonArray();
@@ -80,5 +102,16 @@ public class ProjectController {
 			}
 		}
 		return gson.toJson(results);
+	}
+	
+	@CrossOrigin(origins = { "*", "http://localhost:8100" })
+	@RequestMapping(value="/saveProject",method=RequestMethod.POST)
+	public String saveProject(@RequestParam("project") String project,@RequestParam("taskList") String taskList){
+		Gson gson = GsonUtil.getGson();
+		Project p = gson.fromJson(project,Project.class);
+		Type type = new TypeToken<List<Task>>(){}.getType();
+		List<Task> tList = gson.fromJson(taskList, type);
+		Project newP = projectService.save(p,tList) ;
+		return gson.toJson(newP);
 	}
 }

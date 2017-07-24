@@ -1,6 +1,9 @@
 package com.raytrex.frontier.project.service;
 
+import java.sql.Timestamp;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -9,12 +12,16 @@ import org.springframework.stereotype.Service;
 
 import com.raytrex.frontier.repository.CustomerRepository;
 import com.raytrex.frontier.repository.EmployeeRepository;
+import com.raytrex.frontier.repository.ProjectOwnerRepository;
 import com.raytrex.frontier.repository.ProjectRepository;
+import com.raytrex.frontier.repository.ProjectStatusRepository;
 import com.raytrex.frontier.repository.bean.Customer;
 import com.raytrex.frontier.repository.bean.Employee;
 import com.raytrex.frontier.repository.bean.Project;
 import com.raytrex.frontier.repository.bean.ProjectOwner;
 import com.raytrex.frontier.repository.bean.ProjectStatus;
+import com.raytrex.frontier.repository.bean.Task;
+import com.raytrex.frontier.task.service.TaskService;
 import com.raytrex.rpv.repository.OrderListRepository;
 import com.raytrex.rpv.repository.bean.OrderList;
 
@@ -23,11 +30,17 @@ public class ProjectService {
 	@Autowired
 	private ProjectRepository projectRespository;
 	@Autowired
+	private ProjectStatusRepository projectStatusRepository;
+	@Autowired
+	private ProjectOwnerRepository projectOwnerRepository;
+	@Autowired
 	private OrderListRepository orderListRepository;
 	@Autowired
 	private CustomerRepository customerRepository;
 	@Autowired
 	private EmployeeRepository employeeRepository;
+	@Autowired
+	private TaskService taskService;
 	
 	/**
 	 * 從RPV那邊Import全部的Project到Frontier
@@ -115,48 +128,48 @@ public class ProjectService {
 			
 			projectStatus.setProjectName(projectName);
 			projectStatus.setProjectNo(project.getProjectNo());
-			projectStatus.setStartDate(order.getRaytrexPoDate());
+			projectStatus.setStartDate(new Timestamp(order.getRaytrexPoDate().getTime()));
 			projectStatus.setDescription(order.getConfig());
 			//依照階段來分級Project的Priority
 			if(order.getMoveIn() != null){
 				if(order.getMoveIn().getTime() > System.currentTimeMillis()){//還沒完成
 					projectStatus.setPriority(1);
-					projectStatus.setAlarmDate(order.getMoveIn());
+					projectStatus.setAlarmDate(new Timestamp(order.getMoveIn().getTime()));
 				}
 			}
 			if(order.getInstallHW() != null){
 				if(order.getInstallHW().getTime() > System.currentTimeMillis() && projectStatus.getPriority() > 1){//還沒完成
 					projectStatus.setPriority(2);
-					projectStatus.setAlarmDate(order.getInstallHW());
+					projectStatus.setAlarmDate(new Timestamp(order.getInstallHW().getTime()));
 				}
 			}
 			if(order.getInstallSW() != null){
 				if(order.getInstallSW().getTime() > System.currentTimeMillis() && projectStatus.getPriority() > 2){//還沒完成
 					projectStatus.setPriority(3);
-					projectStatus.setAlarmDate(order.getInstallSW());
+					projectStatus.setAlarmDate(new Timestamp(order.getInstallSW().getTime()));
 				}
 			}
 			if(order.getInstallMeasure() != null){
 				if(order.getInstallMeasure().getTime() > System.currentTimeMillis() && projectStatus.getPriority() > 3){//還沒完成
 					projectStatus.setPriority(4);
-					projectStatus.setAlarmDate(order.getInstallMeasure());
+					projectStatus.setAlarmDate(new Timestamp(order.getInstallMeasure().getTime()));
 				}
 			}
 			if(order.getUat() != null){
 				if(order.getUat().getTime() > System.currentTimeMillis() && projectStatus.getPriority() > 4){//還沒完成
 					projectStatus.setPriority(5);
-					projectStatus.setAlarmDate(order.getUat());
+					projectStatus.setAlarmDate(new Timestamp(order.getUat().getTime()));
 				}
 			}
 			if(order.getFat() != null){
 				if(order.getFat().getTime() > System.currentTimeMillis() && projectStatus.getPriority() > 5){//還沒完成
 					projectStatus.setPriority(3);
-					projectStatus.setAlarmDate(order.getFat());
+					projectStatus.setAlarmDate(new Timestamp(order.getFat().getTime()));
 				}
 				if(order.getFat().getTime() < System.currentTimeMillis()){//已經超過時間就結束Project
-					projectStatus.setEndDate(order.getFat());
+					projectStatus.setEndDate(new Timestamp(order.getFat().getTime()));
 				}
-				projectStatus.setDueDate(order.getFat());//Project預計結束的時間
+				projectStatus.setDueDate(new Timestamp(order.getFat().getTime()));//Project預計結束的時間
 				
 			}
 			
@@ -208,5 +221,50 @@ public class ProjectService {
 			}
 		}
 		return Arrays.asList(projectArray);
+	}
+
+	public Project save(Project project,List<Task> taskList) {
+		//Project status如果有變動過就直接新增一筆
+		Project dbProject = projectRespository.findOne(project.getProjectNo());
+		ProjectStatus dbProjectStatus = dbProject.getStatusList().get(0);
+		ProjectStatus cProjectStatus = project.getStatusList().get(0);
+		if(!dbProjectStatus.equals(cProjectStatus)){
+			cProjectStatus.setProject(project);
+			cProjectStatus.setStatusUuid(UUID.randomUUID().toString());
+			cProjectStatus.setUpdateDate(new Timestamp(System.currentTimeMillis()));
+			projectStatusRepository.save(cProjectStatus);
+		}
+		//Project Owner如果不存在在裡面了就印上LeaveDate
+		for(ProjectOwner projectOwner : project.getOwnerList()){
+			boolean notFound = true;
+			Iterator<ProjectOwner> poIt = dbProject.getOwnerList().iterator();
+			while(poIt.hasNext()){
+				ProjectOwner dbProjectOwner = poIt.next();
+				if(dbProjectOwner.getLeaveDate() != null){
+					poIt.remove();
+				}else if(projectOwner.getUid().equals(dbProjectOwner.getUid())){
+					poIt.remove();
+					notFound = false;
+					break;
+				}
+			}
+			if(notFound){
+				projectOwner.setProject(project);
+				projectOwner.setJoinDate(new Date());
+				projectOwner.setProjectNo(project.getProjectNo());
+				projectOwnerRepository.save(projectOwner);
+			}
+		}
+		//開始移除不存在的Owner
+		for(ProjectOwner dbPo: dbProject.getOwnerList()){
+			dbPo.setLeaveDate(new Date());
+			projectOwnerRepository.save(dbPo);
+		}
+		Project newProject = projectRespository.save(project);
+		//儲存Task List
+		for(Task task : taskList){
+			taskService.save(task);
+		}
+		return newProject;
 	}
 }

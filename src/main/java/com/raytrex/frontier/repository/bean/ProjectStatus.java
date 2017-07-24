@@ -1,13 +1,17 @@
 package com.raytrex.frontier.repository.bean;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.google.gson.annotations.Expose;
 
@@ -19,7 +23,7 @@ public class ProjectStatus {
 	@Expose
 	private String statusUuid;
 	
-	@Column(name="project_no")
+	@Transient
 	@Expose
 	private String projectNo;
 	
@@ -29,23 +33,26 @@ public class ProjectStatus {
 	
 	@Column(name="start_date")
 	@Expose
-	private Date startDate;
+	private Timestamp startDate;
 	
 	@Column(name="end_date")
 	@Expose
-	private Date endDate;
+	private Timestamp endDate;
 	
 	@Column(name="update_date")
 	@Expose
-	private Date updateDate;
+	private Timestamp updateDate;
 	
 	@Column(name="due_date")
 	@Expose
-	private Date dueDate;
+	private Timestamp dueDate;
 	
 	@Column(name="alarm_date")
 	@Expose
-	private Date alarmDate;
+	private Timestamp alarmDate;
+	
+	@Expose
+	private String status;
 	
 	@Expose
 	private String description;
@@ -53,6 +60,19 @@ public class ProjectStatus {
 	@Expose
 	private Integer priority = 6;
 	
+	@ManyToOne
+	@JoinColumn(name="project_no")
+	private Project project;
+	
+
+	public Project getProject() {
+		return project;
+	}
+
+	public void setProject(Project project) {
+		this.project = project;
+	}
+
 	public String getStatusUuid() {
 		return statusUuid;
 	}
@@ -81,15 +101,15 @@ public class ProjectStatus {
 		return startDate;
 	}
 
-	public void setStartDate(Date startDate) {
+	public void setStartDate(Timestamp startDate) {
 		this.startDate = startDate;
 	}
 
-	public Date getEndDate() {
+	public Timestamp getEndDate() {
 		return endDate;
 	}
 
-	public void setEndDate(Date endDate) {
+	public void setEndDate(Timestamp endDate) {
 		this.endDate = endDate;
 	}
 
@@ -97,7 +117,7 @@ public class ProjectStatus {
 		return updateDate;
 	}
 
-	public void setUpdateDate(Date updateDate) {
+	public void setUpdateDate(Timestamp updateDate) {
 		this.updateDate = updateDate;
 	}
 
@@ -105,15 +125,15 @@ public class ProjectStatus {
 		return dueDate;
 	}
 
-	public void setDueDate(Date dueDate) {
+	public void setDueDate(Timestamp dueDate) {
 		this.dueDate = dueDate;
 	}
 
-	public Date getAlarmDate() {
+	public Timestamp getAlarmDate() {
 		return alarmDate;
 	}
 
-	public void setAlarmDate(Date alarmDate) {
+	public void setAlarmDate(Timestamp alarmDate) {
 		this.alarmDate = alarmDate;
 	}
 
@@ -133,18 +153,62 @@ public class ProjectStatus {
 		this.priority = priority;
 	}
 	
+	
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
 	@PrePersist
 	public void onCreate(){
 		if(this.updateDate == null){
-			this.updateDate = new Date();
+			this.updateDate = new Timestamp(System.currentTimeMillis());
 		}
 	}
 	
 	@PreUpdate
 	public void onUpdate(){
 		if(this.updateDate == null){
-			this.updateDate = new Date();
+			this.updateDate = new Timestamp(System.currentTimeMillis());
 		}
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof ProjectStatus){
+			ProjectStatus ps = (ProjectStatus)obj;
+			if(!this.projectName.equals(ps.getProjectName())){
+				return false;
+			}else if(this.startDate == null && ps.getStartDate() != null){
+				return false;
+			}else if(this.getStartDate() != null && ps.getStartDate() != null &&( this.getStartDate().getTime() != ps.getStartDate().getTime())){
+				return false;
+			}else if(this.dueDate == null && ps.getDueDate() != null){
+				return false;
+			}else if(this.getDueDate() != null && ps.getDueDate() != null &&( this.getDueDate().getTime() != ps.getDueDate().getTime())){
+				return false;
+			}else if(this.endDate == null && ps.getEndDate() != null){
+				return false;
+			}else if(this.getEndDate() != null && ps.getEndDate() != null &&( this.getEndDate().getTime() != ps.getEndDate().getTime())){
+				return false;
+			}else if(this.alarmDate == null && ps.getAlarmDate() != null){
+				return false;
+			}else if(this.getAlarmDate() != null && ps.getAlarmDate() != null &&( this.getAlarmDate().getTime() != ps.getAlarmDate().getTime())){
+				return false;
+			}else if(!this.description.equals(ps.getDescription())){
+				return false;
+			}else if(this.priority != ps.getPriority()){
+				return false;
+			}else{
+				return true;
+			}
+		}
+		return super.equals(obj);
+	}
+	
+	
 	
 }

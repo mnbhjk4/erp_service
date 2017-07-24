@@ -7,7 +7,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.google.gson.annotations.Expose;
 
@@ -20,7 +23,7 @@ public class ProjectOwner {
 	@Expose
 	private Integer ownerSerial;
 	
-	@Column(name="project_no")
+	@Transient
 	@Expose
 	private String projectNo = "";
 	
@@ -35,6 +38,18 @@ public class ProjectOwner {
 	@Column(name="leave_date")
 	@Expose
 	private Date leaveDate;
+	
+	@ManyToOne
+	@JoinColumn(name="project_no")
+	private Project project;
+	
+	public Project getProject() {
+		return project;
+	}
+
+	public void setProject(Project project) {
+		this.project = project;
+	}
 
 	public Integer getOwnerSerial() {
 		return ownerSerial;
@@ -75,4 +90,6 @@ public class ProjectOwner {
 	public void setLeaveDate(Date leaveDate) {
 		this.leaveDate = leaveDate;
 	}
+
+	
 }

@@ -18,6 +18,8 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
+import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.entity.FileEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.log4j.Logger;
@@ -305,7 +307,8 @@ public class ADALService {
 			put.addHeader("Authorization", "Bearer " + access_token);
 			put.addHeader("Content-Type", "image/jpeg");
 			put.setURI(uri);
-
+			ByteArrayEntity entry = new ByteArrayEntity(image);
+			put.setEntity(entry);
 			HttpResponse response = client.execute(put);
 			int responseCode = response.getStatusLine().getStatusCode();
 

@@ -4,6 +4,7 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -91,7 +92,17 @@ public class EmployeeService {
 	}
 	
 	public List<Employee> getCompanyUsers(){
-		return employeeRepository.findAll();
+		List<Employee> company = employeeRepository.findAll();
+		for(Employee e : company){
+			Iterator<EmployeeRoles> it = e.getRoleList().iterator();
+			while(it.hasNext()){
+				EmployeeRoles role = it.next();
+				if(role.getToDate() != null){
+					it.remove();
+				}
+			}
+		}
+		return company;
 	}
 	
 	public Employee saveEmployee(Employee employee){
@@ -112,8 +123,11 @@ public class EmployeeService {
 		return employeeRepository.findOne(uid);
 	}
 	
-	public List<Permission> getPermission(String uid){
+	public List<Permission> getPermissionByUid(String uid){
 		return permissionRepository.findByUid(uid);
+	}
+	public List<Permission> getPermissionByRoleId(String roleId){
+		return permissionRepository.findByRoleId(roleId);
 	}
 	
 	public String getNewEmployeeNo(){

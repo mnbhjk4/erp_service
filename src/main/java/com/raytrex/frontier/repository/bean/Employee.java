@@ -1,16 +1,13 @@
 package com.raytrex.frontier.repository.bean;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -31,14 +28,13 @@ public class Employee implements Serializable{
 	@Expose
 	private String mail;
 	
-	@OneToOne(cascade=CascadeType.PERSIST)
+	@OneToOne
 	@JoinColumn(name="uid")
 	@Expose
 	private EmployeeInfo employeesInfo;
 	
 	@Expose
-	@OneToMany(fetch=FetchType.EAGER)
-	@JoinColumn(name="uid")
+	@OneToMany(fetch=FetchType.EAGER,mappedBy="employee")
 	private List<EmployeeRoles> roleList;
 
 	public String getUid() {
