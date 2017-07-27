@@ -1,6 +1,8 @@
 package com.raytrex.frontier.project.service;
 
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
@@ -15,11 +17,13 @@ import com.raytrex.frontier.repository.EmployeeRepository;
 import com.raytrex.frontier.repository.ProjectOwnerRepository;
 import com.raytrex.frontier.repository.ProjectRepository;
 import com.raytrex.frontier.repository.ProjectStatusRepository;
+import com.raytrex.frontier.repository.SerialNoRepository;
 import com.raytrex.frontier.repository.bean.Customer;
 import com.raytrex.frontier.repository.bean.Employee;
 import com.raytrex.frontier.repository.bean.Project;
 import com.raytrex.frontier.repository.bean.ProjectOwner;
 import com.raytrex.frontier.repository.bean.ProjectStatus;
+import com.raytrex.frontier.repository.bean.SerialNo;
 import com.raytrex.frontier.repository.bean.Task;
 import com.raytrex.frontier.task.service.TaskService;
 import com.raytrex.rpv.repository.OrderListRepository;
@@ -41,6 +45,8 @@ public class ProjectService {
 	private EmployeeRepository employeeRepository;
 	@Autowired
 	private TaskService taskService;
+	@Autowired
+	private SerialNoRepository serialRepository;
 	
 	/**
 	 * 從RPV那邊Import全部的Project到Frontier
@@ -226,45 +232,82 @@ public class ProjectService {
 	public Project save(Project project,List<Task> taskList) {
 		//Project status如果有變動過就直接新增一筆
 		Project dbProject = projectRespository.findOne(project.getProjectNo());
-		ProjectStatus dbProjectStatus = dbProject.getStatusList().get(0);
 		ProjectStatus cProjectStatus = project.getStatusList().get(0);
-		if(!dbProjectStatus.equals(cProjectStatus)){
+		if(dbProject == null){
+			Project newProject = new Project();
+			newProject.setProjectNo(project.getProjectNo());
+			newProject.setCustomerId(project.getCustomerId());
+			newProject.setAttachUuid(project.getAttachUuid());
+			newProject.setPermissionId(project.getPermissionId());
+			projectRespository.save(newProject);
 			cProjectStatus.setProject(project);
-			cProjectStatus.setStatusUuid(UUID.randomUUID().toString());
-			cProjectStatus.setUpdateDate(new Timestamp(System.currentTimeMillis()));
 			projectStatusRepository.save(cProjectStatus);
+		}else{
+			ProjectStatus dbProjectStatus = dbProject.getStatusList() != null?dbProject.getStatusList().get(0):new ProjectStatus();
+			
+			if(!dbProjectStatus.equals(cProjectStatus)){
+				cProjectStatus.setProject(project);
+				cProjectStatus.setStatusUuid(UUID.randomUUID().toString());
+				cProjectStatus.setUpdateDate(new Timestamp(System.currentTimeMillis()));
+				projectStatusRepository.save(cProjectStatus);
+			}
 		}
+
 		//Project Owner如果不存在在裡面了就印上LeaveDate
 		for(ProjectOwner projectOwner : project.getOwnerList()){
 			boolean notFound = true;
-			Iterator<ProjectOwner> poIt = dbProject.getOwnerList().iterator();
-			while(poIt.hasNext()){
-				ProjectOwner dbProjectOwner = poIt.next();
-				if(dbProjectOwner.getLeaveDate() != null){
-					poIt.remove();
-				}else if(projectOwner.getUid().equals(dbProjectOwner.getUid())){
-					poIt.remove();
-					notFound = false;
-					break;
+			if(dbProject != null){
+				Iterator<ProjectOwner> poIt = dbProject.getOwnerList().iterator();
+				while(poIt.hasNext()){
+					ProjectOwner dbProjectOwner = poIt.next();
+					if(dbProjectOwner.getLeaveDate() != null){
+						poIt.remove();
+					}else if(projectOwner.getUid().equals(dbProjectOwner.getUid())){
+						poIt.remove();
+						notFound = false;
+						break;
+					}
 				}
 			}
+			
 			if(notFound){
 				projectOwner.setProject(project);
+				projectOwner.setProjectNo(project.getProjectNo());
 				projectOwner.setJoinDate(new Date());
 				projectOwner.setProjectNo(project.getProjectNo());
 				projectOwnerRepository.save(projectOwner);
 			}
 		}
 		//開始移除不存在的Owner
-		for(ProjectOwner dbPo: dbProject.getOwnerList()){
-			dbPo.setLeaveDate(new Date());
-			projectOwnerRepository.save(dbPo);
+		if(dbProject != null){
+			for(ProjectOwner dbPo: dbProject.getOwnerList()){
+				dbPo.setLeaveDate(new Date());
+				projectOwnerRepository.save(dbPo);
+			}
 		}
+		
 		Project newProject = projectRespository.save(project);
 		//儲存Task List
 		for(Task task : taskList){
 			taskService.save(task);
 		}
 		return newProject;
+	}
+	
+	public String getProjectSerialNo(){
+		SerialNo serialNo = serialRepository.findOne("RX");
+		DecimalFormat df = new DecimalFormat("0000000");
+		if(serialNo == null){
+			SerialNo sn = new SerialNo();
+			sn.setCount(0);
+			sn.setSerialName("RX");
+			sn.setDescription("Project單序號");
+			serialNo = serialRepository.save(sn);
+		}
+		Integer count = serialNo.getCount()+1;
+		serialNo.setCount(count);
+		String no = "RX"+df.format(count);
+		serialRepository.save(serialNo);
+		return no;
 	}
 }

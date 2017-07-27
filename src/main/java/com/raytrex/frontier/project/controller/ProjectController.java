@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Properties;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -25,6 +26,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.raytrex.frontier.project.service.ProjectService;
+import com.raytrex.frontier.repository.bean.Employee;
 import com.raytrex.frontier.repository.bean.Project;
 import com.raytrex.frontier.repository.bean.ProjectOwner;
 import com.raytrex.frontier.repository.bean.ProjectStatus;
@@ -113,5 +115,32 @@ public class ProjectController {
 		List<Task> tList = gson.fromJson(taskList, type);
 		Project newP = projectService.save(p,tList) ;
 		return gson.toJson(newP);
+	}
+	
+	@CrossOrigin(origins = { "*", "http://localhost:8100" })
+	@RequestMapping(value="/createNewProject",method=RequestMethod.POST)
+	public String createProject(@RequestParam String employee){
+		Gson gson = GsonUtil.getGson();
+		Employee e = gson.fromJson(employee, Employee.class);
+		Project project = new Project();
+		//Project NO
+		project.setProjectNo(projectService.getProjectSerialNo());
+		//Project Owner
+		ArrayList<ProjectOwner> projectOwnerList = new ArrayList<ProjectOwner>();
+		ProjectOwner po = new ProjectOwner();
+		po.setUid(e.getUid());
+		po.setProject(project);
+		projectOwnerList.add(po);
+		project.setOwnerList(projectOwnerList);
+		
+		//Project status
+		ProjectStatus ps = new ProjectStatus();
+		ps.setStatusUuid(UUID.randomUUID().toString());
+		ps.setProject(project);
+		ArrayList<ProjectStatus> statusList = new ArrayList<ProjectStatus>();
+		statusList.add(ps);
+		project.setStatusList(statusList);
+
+		return gson.toJson(project);
 	}
 }

@@ -46,6 +46,10 @@ public class Task implements Serializable{
 	@Expose
 	private String parentTaskNo;
 	
+	@Column(name="type")
+	@Expose
+	private String type;
+	
 	@OneToMany(cascade={CascadeType.MERGE})
 	@JoinColumn(name="task_no")
 	@OrderBy("join_date")
@@ -134,5 +138,11 @@ public class Task implements Serializable{
 	}
 	public void setTaskStatusList(List<TaskStatus> taskStatusList) {
 		this.taskStatusList = taskStatusList;
+	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
 	}
 }
