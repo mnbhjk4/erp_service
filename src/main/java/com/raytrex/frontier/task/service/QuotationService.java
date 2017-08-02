@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,8 +32,16 @@ import org.springframework.stereotype.Service;
 
 import com.raytrex.frontier.repository.KeysightPriceHistoryRepository;
 import com.raytrex.frontier.repository.KeysightPriceRepository;
+import com.raytrex.frontier.repository.QuotationItemDetailRespository;
+import com.raytrex.frontier.repository.QuotationItemRespository;
+import com.raytrex.frontier.repository.QuotationRespository;
+import com.raytrex.frontier.repository.SerialNoRepository;
 import com.raytrex.frontier.repository.bean.KeysightPrice;
 import com.raytrex.frontier.repository.bean.KeysightPriceHistory;
+import com.raytrex.frontier.repository.bean.Quotation;
+import com.raytrex.frontier.repository.bean.QuotationItem;
+import com.raytrex.frontier.repository.bean.QuotationItemDetail;
+import com.raytrex.frontier.repository.bean.SerialNo;
 
 @Service
 public class QuotationService {
@@ -41,7 +50,15 @@ public class QuotationService {
 	private KeysightPriceRepository keysightPriceRepository;
 	@Autowired
 	private KeysightPriceHistoryRepository keysightPriceHistoryRepository;
-
+	@Autowired
+	private QuotationRespository quotationRespository;
+	@Autowired
+	private QuotationItemRespository quotationItemRespository;
+	@Autowired
+	private QuotationItemDetailRespository quotationItemDetailRespository;
+	@Autowired
+	private SerialNoRepository serialRepository;
+	
 	public List<KeysightPrice> parseKeysightXLSXPriceExcel(Workbook wb) {
 		Sheet sheet = wb.getSheetAt(0);
 		Iterator<Row> rowIt = sheet.rowIterator();
@@ -203,5 +220,60 @@ public class QuotationService {
 			e.printStackTrace();
 		}
 		return exchangeMap;
+	}
+	
+	public Quotation getQuotation(String taskNo){
+		List<Quotation> list = quotationRespository.findAllByTaskNo(taskNo);
+		if(list.isEmpty()){
+			return null;
+		}
+		return list.get(0);
+	}
+	
+	public List<QuotationItem> getQuotationItem(String quotationNo){
+		return quotationItemRespository.findAllByQuotationNo(quotationNo);
+	}
+	
+	public Quotation saveQuotation(Quotation quotation){
+		Quotation newQ = quotationRespository.save(quotation);
+		return newQ;
+	}
+	
+	public List<QuotationItem> saveQuotationItem(Quotation quotation,List<QuotationItem> quotationItemList){
+		for(QuotationItem qi : quotationItemList){
+			qi.setQuotationNo(quotation.getQuotationNo());
+			QuotationItem newQi = quotationItemRespository.save(qi);
+			List<QuotationItemDetail> qidList = qi.getQuotationItemDetailList();
+			for(QuotationItemDetail qid:qidList){
+				qid.setQuotationItem(newQi);
+				if(qid.getUpdateTime() == null){
+					qid.setUpdateTime(new Timestamp(System.currentTimeMillis()));
+				}
+				quotationItemDetailRespository.save(qid);
+			}
+		}
+		return quotationItemList;
+	}
+	
+	public String getQuotationNo(){
+		DecimalFormat df = new DecimalFormat("00");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+		String today = sdf.format(new Date());
+		SerialNo serialNo = serialRepository.findOne("QN");
+		if(serialNo == null){
+			SerialNo sn = new SerialNo();
+			sn.setCount(0);
+			sn.setSerialName("QN");
+			sn.setDescription("Quotation序號");
+			serialNo = serialRepository.save(sn);
+		}else if(!sdf.format(serialNo.getUpdateTime()).equalsIgnoreCase(today)){
+			serialNo.setCount(0);
+		}
+		
+		Integer count = serialNo.getCount()+1;
+		serialNo.setCount(count);
+		String no = "QN"+today+ df.format(count);
+		serialRepository.save(serialNo);
+		return no;
 	}
 }

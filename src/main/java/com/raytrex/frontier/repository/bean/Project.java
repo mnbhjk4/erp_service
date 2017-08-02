@@ -7,11 +7,13 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
+import javax.persistence.Table;
 
 import com.google.gson.annotations.Expose;
 
 
 @Entity
+@Table(name="project")
 public class Project {
 	@Id
 	@Column(name="project_no")

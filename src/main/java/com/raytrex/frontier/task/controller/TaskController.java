@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.raytrex.frontier.repository.bean.Quotation;
 import com.raytrex.frontier.repository.bean.Task;
+import com.raytrex.frontier.task.service.QuotationService;
 import com.raytrex.frontier.task.service.TaskService;
 import com.raytrex.frontier.utils.GsonUtil;
 
@@ -25,7 +27,8 @@ public class TaskController {
 	static Logger log = Logger.getLogger(TaskController.class);
 	@Autowired
 	private TaskService taskService;
-
+	@Autowired
+	private QuotationService quotationService;
 	
 	
 	/**
@@ -74,7 +77,21 @@ public class TaskController {
 			
 			if(!task.getSubTaskList().isEmpty()){
 				for(Task subTask : task.getSubTaskList()){
-					taskService.save(subTask);
+					if(subTask.getType().equals("NORMAL_TASK")){
+						taskService.save(subTask);
+					}else if(subTask.getType().equals("QUOTATION_TASK")){
+						if(subTask.getQuotation() != null){
+							Quotation q = subTask.getQuotation();
+							if(q.getQuotationNo() == null || q.getQuotationNo().isEmpty()){
+								q.setQuotationNo(quotationService.getQuotationNo());
+							}
+						}
+						subTask.setName(subTask.getQuotation().getQuotationNo());
+						taskService.save(subTask);
+						Quotation newQ = quotationService.saveQuotation(subTask.getQuotation());
+						quotationService.saveQuotationItem(newQ,subTask.getQuotationItemList());
+					}
+					
 				}	
 			}
 			refreshTask = taskService.save(task);

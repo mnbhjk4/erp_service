@@ -180,9 +180,9 @@ public class ProjectStatus {
 	public boolean equals(Object obj) {
 		if(obj instanceof ProjectStatus){
 			ProjectStatus ps = (ProjectStatus)obj;
-			if(!this.projectName.equals(ps.getProjectName())){
+			if(this.projectName != null && !this.projectName.equals(ps.getProjectName())){
 				return false;
-			}else if(this.startDate == null && ps.getStartDate() != null){
+			}else if(this.projectName != null && this.startDate == null && ps.getStartDate() != null){
 				return false;
 			}else if(this.getStartDate() != null && ps.getStartDate() != null &&( this.getStartDate().getTime() != ps.getStartDate().getTime())){
 				return false;
@@ -198,9 +198,9 @@ public class ProjectStatus {
 				return false;
 			}else if(this.getAlarmDate() != null && ps.getAlarmDate() != null &&( this.getAlarmDate().getTime() != ps.getAlarmDate().getTime())){
 				return false;
-			}else if(!this.description.equals(ps.getDescription())){
+			}else if(this.description != null && !this.description.equals(ps.getDescription())){
 				return false;
-			}else if(this.priority != ps.getPriority()){
+			}else if(this.priority != null && this.priority != ps.getPriority()){
 				return false;
 			}else{
 				return true;

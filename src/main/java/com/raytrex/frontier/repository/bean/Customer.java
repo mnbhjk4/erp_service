@@ -3,10 +3,12 @@ package com.raytrex.frontier.repository.bean;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 import com.google.gson.annotations.Expose;
 
 @Entity
+@Table(name="customer")
 public class Customer {
 	@Id
 	@Column(name="customer_id")

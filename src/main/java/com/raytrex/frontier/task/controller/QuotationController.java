@@ -17,7 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.raytrex.frontier.repository.bean.KeysightPrice;
+import com.raytrex.frontier.repository.bean.Quotation;
+import com.raytrex.frontier.repository.bean.QuotationItem;
 import com.raytrex.frontier.task.service.QuotationService;
 import com.raytrex.frontier.utils.GsonUtil;
 
@@ -63,5 +66,17 @@ public class QuotationController {
 	public String getExchangeRate(){
 		Gson gson = GsonUtil.getGson();
 		return gson.toJson(quotationService.getExchangeRate());
+	}
+	
+	@CrossOrigin(origins = {"*","http://localhost:8100"})
+	@PostMapping(value="/getQuotation")
+	public String getQuotation(String taskNo){
+		Gson gson = GsonUtil.getGson();
+		Quotation quotation = quotationService.getQuotation(taskNo);
+		List<QuotationItem> quotationItemnList = quotationService.getQuotationItem(quotation.getQuotationNo());
+		JsonObject jo = new JsonObject();
+		jo.add("quotation", gson.toJsonTree(quotation));
+		jo.add("quotationItemList", gson.toJsonTree(quotationItemnList));
+		return gson.toJson(jo);
 	}
 }

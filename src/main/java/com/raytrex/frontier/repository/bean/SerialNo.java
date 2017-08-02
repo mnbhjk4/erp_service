@@ -13,7 +13,7 @@ import javax.persistence.Table;
 import com.google.gson.annotations.Expose;
 
 @Entity
-@Table(name="Serial_No")
+@Table(name="serial_no")
 public class SerialNo implements Serializable {
 	@Id
 	@Column(name="serial_name")

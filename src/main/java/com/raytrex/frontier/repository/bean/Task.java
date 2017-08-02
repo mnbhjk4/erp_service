@@ -12,11 +12,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
+import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import com.google.gson.annotations.Expose;
 
 @Entity
+@Table(name="task")
 public class Task implements Serializable{
 	@Column(name="project_number")
 	@Expose
@@ -71,6 +73,14 @@ public class Task implements Serializable{
 	@Transient
 	@Expose
 	private List<Task> subTaskList = new ArrayList<Task>();
+	
+	@Transient
+	@Expose
+	private Quotation quotation;
+	
+	@Transient
+	@Expose
+	private List<QuotationItem> quotationItemList;
 	
 	public List<Task> getSubTaskList() {
 		return subTaskList;
@@ -145,4 +155,17 @@ public class Task implements Serializable{
 	public void setType(String type) {
 		this.type = type;
 	}
+	public Quotation getQuotation() {
+		return quotation;
+	}
+	public void setQuotation(Quotation quotation) {
+		this.quotation = quotation;
+	}
+	public List<QuotationItem> getQuotationItemList() {
+		return quotationItemList;
+	}
+	public void setQuotationItemList(List<QuotationItem> quotationItemList) {
+		this.quotationItemList = quotationItemList;
+	}
+	
 }

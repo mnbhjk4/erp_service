@@ -1,5 +1,4 @@
 package com.raytrex;
-
 import java.util.Properties;
 
 import javax.persistence.EntityManager;
@@ -26,9 +25,6 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.multipart.support.MultipartFilter;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @Configuration
 @EnableTransactionManagement
@@ -43,11 +39,11 @@ public class FrontierRepositoryConfig {
 	@Autowired
 	@Qualifier("frontierDatasource")
 	private DataSource dataSource;
+	
 
 	@Bean(name = "frontierDatasource")
 	@Primary
-	@ConfigurationProperties(prefix = "frontier.datasource")
-	public DataSource getDatasource() {
+	public DataSource getDatasource(FrontierDbConfig frontierDbConfig) {
 		JndiObjectFactoryBean jndiBean = new JndiObjectFactoryBean();
 		jndiBean.setJndiName("jdbc/frontier");
 		try {
@@ -64,7 +60,12 @@ public class FrontierRepositoryConfig {
 				log.error("Frontier can't find any JNDI Datesource with name 'jdbc/frontier'");
 			}
 		}
-		return DataSourceBuilder.create().build();
+		DataSourceBuilder dsb = DataSourceBuilder.create();
+		dsb.driverClassName(frontierDbConfig.getDriverClassName());
+		dsb.username(frontierDbConfig.getUsername());
+		dsb.password(frontierDbConfig.getPassword());
+		dsb.url(frontierDbConfig.getUrl());
+		return dsb.build();
 	}
 
 	@Bean(name = "frontierEntityManager")

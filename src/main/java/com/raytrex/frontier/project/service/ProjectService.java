@@ -189,7 +189,8 @@ public class ProjectService {
 	}
 	
 	public List<Project> getProjectByUid(String uid){
-		return projectRespository.findProjectByProjectOwnerUid(uid);
+		List<Project> list = projectRespository.findProjectByProjectOwnerUid(uid);
+		return list;
 	}
 	
 	public List<Project> getAllProject(){

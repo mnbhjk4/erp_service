@@ -493,6 +493,9 @@ public class TaskService {
 			}else{
 				dbTask.getTaskOwnerList().add(owner); //加入名單
 			}
+			if(owner.getJoinDate() == null){
+				owner.setJoinDate(new Date(System.currentTimeMillis()));
+			}
 		}
 		for(String uid : leaveUidSet){//開始將剃除名單中Update Leave date
 			taskOwnerMap.get(uid).setLeaveDate(new Date());

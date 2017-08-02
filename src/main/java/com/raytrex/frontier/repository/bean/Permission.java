@@ -10,12 +10,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import org.springframework.security.core.GrantedAuthority;
 
 import com.google.gson.annotations.Expose;
 
 @Entity
+@Table(name="permission")
 public class Permission implements Serializable, GrantedAuthority {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
