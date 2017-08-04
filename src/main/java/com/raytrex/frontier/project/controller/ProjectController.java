@@ -25,6 +25,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.raytrex.frontier.employee.service.EmployeeService;
 import com.raytrex.frontier.project.service.ProjectService;
 import com.raytrex.frontier.repository.bean.Employee;
 import com.raytrex.frontier.repository.bean.Project;
@@ -40,6 +41,8 @@ import com.raytrex.frontier.utils.GsonUtil;
 public class ProjectController {
 	@Autowired
 	private ProjectService projectService;
+	@Autowired
+	private EmployeeService employeeService;
 	@Autowired
 	private TaskService taskService;
 	
@@ -67,8 +70,8 @@ public class ProjectController {
 		Gson gson = GsonUtil.getGson();
 		JsonArray results = new JsonArray();
 		if(p.containsKey("uid")){
-//			List<Project> projectList = projectService.getProjectByUid(p.getProperty("uid"));
-			List<Project> projectList = projectService.getAllProject();
+			List<String> memeberUidList= employeeService.getChildDepartmentMember(p.get("uid").toString());
+			List<Project> projectList = projectService.getProjectByUid(memeberUidList);
 			if(!projectList.isEmpty()){
 				projectList = projectService.sortProjectList(projectList);
 			}
@@ -88,7 +91,7 @@ public class ProjectController {
 					newProjectStatus.add(project.getStatusList().get(0));
 					project.setStatusList(newProjectStatus);
 				}
-				LinkedHashMap<Task, List<Task>> tasks = taskService.getTaskByProjectNumber(project.getProjectNo());
+				LinkedHashMap<Task, List<Task>> tasks = taskService.getTaskByProjectNumber(project.getProjectNo(),memeberUidList);
 				
 				JsonArray jsonArray = new JsonArray();
 				for(Task parentTask : tasks.keySet()){
@@ -97,10 +100,13 @@ public class ProjectController {
 					taskJson.add("subTaskList", gson.toJsonTree(subTasks));
 					jsonArray.add(taskJson);
 				}
-				JsonObject object = new JsonObject();
-				object.add("project", gson.toJsonTree(project));
-				object.add("task",jsonArray);
-				results.add(object);
+				if(jsonArray.size() > 0){
+					JsonObject object = new JsonObject();
+					object.add("project", gson.toJsonTree(project));
+					object.add("task",jsonArray);
+					results.add(object);	
+				}
+				
 			}
 		}
 		return gson.toJson(results);

@@ -62,12 +62,13 @@ public class TokenAuthenticationService {
 					List<Permission> permissionList = new ArrayList<Permission>();
 					Employee employee = employeeRepository.findOne(oid);
 
-					for(EmployeeRoles role : employee.getRoleList()){
-						List<Permission> tmpPermissionList = permissionRepository.findByRoleId(role.getRole().getRoleId());
-						if(tmpPermissionList != null && !tmpPermissionList.isEmpty()){
-							permissionList.addAll(tmpPermissionList);
-						}
-					}
+					//直接用UID permission即可
+//					for(EmployeeRoles role : employee.getRoleList()){
+//						List<Permission> tmpPermissionList = permissionRepository.findByRoleId(role.getRole().getRoleId());
+//						if(tmpPermissionList != null && !tmpPermissionList.isEmpty()){
+//							permissionList.addAll(tmpPermissionList);
+//						}
+//					}
 					List<Permission> uidPermissionList = permissionRepository.findByUid(oid);
 					permissionList.addAll(uidPermissionList);
 					return new UsernamePasswordAuthenticationToken(name, oid, permissionList);

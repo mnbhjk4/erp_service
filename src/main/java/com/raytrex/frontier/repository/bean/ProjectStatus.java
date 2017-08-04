@@ -182,6 +182,8 @@ public class ProjectStatus {
 			ProjectStatus ps = (ProjectStatus)obj;
 			if(this.projectName != null && !this.projectName.equals(ps.getProjectName())){
 				return false;
+			}else if(this.projectName == null && ps.getProjectName() != null){
+				return false;
 			}else if(this.projectName != null && this.startDate == null && ps.getStartDate() != null){
 				return false;
 			}else if(this.getStartDate() != null && ps.getStartDate() != null &&( this.getStartDate().getTime() != ps.getStartDate().getTime())){

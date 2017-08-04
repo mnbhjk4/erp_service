@@ -3,6 +3,7 @@ package com.raytrex.frontier.project.service;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
@@ -13,16 +14,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.raytrex.frontier.repository.CustomerRepository;
+import com.raytrex.frontier.repository.DepartmentRepository;
 import com.raytrex.frontier.repository.EmployeeRepository;
 import com.raytrex.frontier.repository.ProjectOwnerRepository;
 import com.raytrex.frontier.repository.ProjectRepository;
 import com.raytrex.frontier.repository.ProjectStatusRepository;
 import com.raytrex.frontier.repository.SerialNoRepository;
 import com.raytrex.frontier.repository.bean.Customer;
+import com.raytrex.frontier.repository.bean.Department;
 import com.raytrex.frontier.repository.bean.Employee;
+import com.raytrex.frontier.repository.bean.EmployeeRoles;
 import com.raytrex.frontier.repository.bean.Project;
 import com.raytrex.frontier.repository.bean.ProjectOwner;
 import com.raytrex.frontier.repository.bean.ProjectStatus;
+import com.raytrex.frontier.repository.bean.Role;
 import com.raytrex.frontier.repository.bean.SerialNo;
 import com.raytrex.frontier.repository.bean.Task;
 import com.raytrex.frontier.task.service.TaskService;
@@ -43,6 +48,8 @@ public class ProjectService {
 	private CustomerRepository customerRepository;
 	@Autowired
 	private EmployeeRepository employeeRepository;
+	@Autowired
+	private DepartmentRepository departmentRepository;
 	@Autowired
 	private TaskService taskService;
 	@Autowired
@@ -187,9 +194,23 @@ public class ProjectService {
 		}
 		return projectRespository.findAll();
 	}
-	
-	public List<Project> getProjectByUid(String uid){
-		List<Project> list = projectRespository.findProjectByProjectOwnerUid(uid);
+
+	public List<Project> getProjectByUid(List<String> uidList){
+		List<Project> list = projectRespository.findProjectByProjectOwnerUidList(uidList);
+		List<String> projectList = projectRespository.getProductWithOwnTask(uidList);
+		for(String projectNo : projectList){
+			boolean duplicateProject = false;
+			for(Project p : list){
+				if(p.getProjectNo().equals(projectNo)){
+					duplicateProject = true;
+					break;
+				}
+			}
+			if(!duplicateProject){
+				list.add(projectRespository.findOne(projectNo));
+			}
+			
+		}
 		return list;
 	}
 	
@@ -246,7 +267,7 @@ public class ProjectService {
 		}else{
 			ProjectStatus dbProjectStatus = dbProject.getStatusList() != null?dbProject.getStatusList().get(0):new ProjectStatus();
 			
-			if(!dbProjectStatus.equals(cProjectStatus)){
+			if(!cProjectStatus.equals(dbProjectStatus)){
 				cProjectStatus.setProject(project);
 				cProjectStatus.setStatusUuid(UUID.randomUUID().toString());
 				cProjectStatus.setUpdateDate(new Timestamp(System.currentTimeMillis()));
@@ -289,7 +310,9 @@ public class ProjectService {
 		
 		Project newProject = projectRespository.save(project);
 		//儲存Task List
-		for(Task task : taskList){
+		for(int index =0 ;index < taskList.size() ;index++){
+			Task task = taskList.get(index);
+			task.getTaskStatusList().get(0).setTaskIndex(index+1);
 			taskService.save(task);
 		}
 		return newProject;

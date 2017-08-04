@@ -19,6 +19,7 @@ import com.raytrex.frontier.repository.EmployeeRolesRepository;
 import com.raytrex.frontier.repository.PermissionRepository;
 import com.raytrex.frontier.repository.RoleRepository;
 import com.raytrex.frontier.repository.SerialNoRepository;
+import com.raytrex.frontier.repository.bean.Department;
 import com.raytrex.frontier.repository.bean.Employee;
 import com.raytrex.frontier.repository.bean.EmployeeInfo;
 import com.raytrex.frontier.repository.bean.EmployeeRoles;
@@ -157,5 +158,22 @@ public class EmployeeService {
 			}
 		}
 		return no;
+	}
+	
+	public List<String> getChildDepartmentMember(String uid){
+		Employee own = employeeRepository.findOne(uid);
+		List<String> uidList = new ArrayList<String>();
+		for(EmployeeRoles er : own.getRoleList()){
+			if(er.getToDate() != null) continue;
+			List<Department> cdList = departmentRepository.getChildDepartment(er.getRole().getDepartment().getDepId());
+			for(Department cd : cdList){
+				List<Employee> cemployee = employeeRepository.getEmployeeWithDepId(cd.getDepId());
+				for(Employee ce : cemployee){
+					uidList.add(ce.getUid());
+				}
+			}
+		}
+		uidList.add(0,uid);
+		return uidList;
 	}
 }

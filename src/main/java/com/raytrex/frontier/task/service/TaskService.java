@@ -278,7 +278,7 @@ public class TaskService {
 	 * 	</ul>
 	 * </ul>
 	 */
-	public LinkedHashMap<Task, List<Task>> getTaskByProjectNumber(String project_number) {
+	public LinkedHashMap<Task, List<Task>> getTaskByProjectNumber(String project_number,List<String> memeberUidList) {
 		LinkedHashMap<Task, List<Task>> resultMap = new LinkedHashMap<Task, List<Task>>();
 		List<Task> result = taskRepository.findByProjectNumber(project_number);
 		//先將Task的Root task放到Map中
@@ -301,12 +301,18 @@ public class TaskService {
 			// 移除已經不在Task中的Owner
 			List<TaskOwner> ownerList = task.getTaskOwnerList();
 			Iterator<TaskOwner> ownerIt = ownerList.iterator();
+			boolean ownTask = false;
 			while (ownerIt.hasNext()) {
 				TaskOwner owner = ownerIt.next();
 				if (owner.getLeaveDate() != null) {
 					ownerIt.remove();
+					continue;
+				}
+				if(memeberUidList.contains(owner.getUid())){
+					ownTask = true;
 				}
 			}
+			if(!ownTask) continue;
 			// 只留一筆Task Status
 			List<TaskStatus> newTaskStatus = new ArrayList<TaskStatus>();
 			newTaskStatus.add(task.getTaskStatusList().get(0));

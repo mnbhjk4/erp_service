@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.raytrex.frontier.employee.service.EmployeeService;
 import com.raytrex.frontier.repository.bean.Quotation;
 import com.raytrex.frontier.repository.bean.Task;
 import com.raytrex.frontier.task.service.QuotationService;
@@ -29,7 +30,8 @@ public class TaskController {
 	private TaskService taskService;
 	@Autowired
 	private QuotationService quotationService;
-	
+	@Autowired
+	private EmployeeService employeeService;
 	
 	/**
 	 * 用Project number來取得其Project下所有的Task
@@ -55,7 +57,7 @@ public class TaskController {
 	public String getTaskByProjectNo(@RequestBody String project_number){
 		Gson gson = GsonUtil.getGson();
 		Map requestJson = gson.fromJson(project_number, Map.class);
-		LinkedHashMap<Task, List<Task>> tasks = taskService.getTaskByProjectNumber(requestJson.get("project_no").toString());
+		LinkedHashMap<Task, List<Task>> tasks = taskService.getTaskByProjectNumber(requestJson.get("project_no").toString(),employeeService.getChildDepartmentMember(requestJson.get("uid").toString()));
 		
 		JsonArray jsonArray = new JsonArray();
 		for(Task parentTask : tasks.keySet()){

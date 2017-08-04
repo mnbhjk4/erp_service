@@ -29,6 +29,8 @@ public class Task implements Serializable{
 	@Expose
 	private String taskNo;
 	
+
+	
 	@Column(name="customer_id")
 	@Expose
 	private String customerId;

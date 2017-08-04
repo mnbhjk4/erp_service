@@ -68,5 +68,19 @@ public class CustomerController {
 		Gson gson = GsonUtil.getGson();
 		return gson.toJson(customerRepository.findAllByCountryAndRegionAndName(country, region, name));
 	}
+	
+	@CrossOrigin(origins = { "*", "http://localhost:8100" })
+	@RequestMapping(value="/getCustomer",method=RequestMethod.POST)
+	public String getCustomer(String customerId){
+		Gson gson = GsonUtil.getGson();
+		return gson.toJson(customerRepository.findOne(customerId));
+	}
+	
+	@CrossOrigin(origins = { "*", "http://localhost:8100" })
+	@RequestMapping(value="/getAllCustomer",method=RequestMethod.POST)
+	public String getAllCustomer(){
+		Gson gson = GsonUtil.getGson();
+		return gson.toJson(customerRepository.findAll());
+	}
 }
 
