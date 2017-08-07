@@ -6,13 +6,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
-import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan
 @EnableAutoConfiguration
 @EnableConfigurationProperties(value={FrontierDbConfig.class,RaytrexRPVDbConfig.class})
-
 public class Application extends SpringBootServletInitializer{
 	
 	public static void main(String [] args){

@@ -22,6 +22,6 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="design_document/mariadb-java-client-2.0.1.jar"/>
+	<classpathentry kind="lib" path="D:/Server/apache-tomcat-8.0.45/lib/mariadb-java-client-2.0.1.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
